@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 
 public class TextArea {
 	private int x, y;
-	private int thicness = 10;
+	private int thiccness = 10;
 	private int width = 200;
 	private int height = 100;
 
@@ -112,8 +112,8 @@ public class TextArea {
 	public void setBackgroundColor(Color color) {
 		this.backgroundColor = color;
 	}
-	public void setThicness(int ThicnessInPixeln) {
-		thicness = ThicnessInPixeln;
+	public void setThiccness(int ThicnessInPixeln) {
+		thiccness = ThicnessInPixeln;
 	}
 	public void setFramingColor(Color color) {
 		this.outlineColor = color;
@@ -158,21 +158,17 @@ public class TextArea {
 			throw new IllegalArgumentException("Unexpected value: " + alignment);
 		}
 		
-
-		
 		if(this.drawOutline) {
 			this.drawOutline(g);
 		}	
 	}
 	
 	private void drawOutline(Graphics2D g) {
-		
 		g.setColor(outlineColor);
-		g.fillRect(x, y, thicness, height);
-		g.fillRect(x, y, width, thicness);
-		g.fillRect(x + width - thicness, y, thicness, height);
-		g.fillRect(x, y + height - thicness, width, thicness);
+		g.fillRect(x, y, thiccness, height);
+		g.fillRect(x, y, width, thiccness);
+		g.fillRect(x + width - thiccness, y, thiccness, height);
+		g.fillRect(x, y + height - thiccness, width, thiccness);
 		g.drawRect(x, y, width, height);
-		
 	}
 }

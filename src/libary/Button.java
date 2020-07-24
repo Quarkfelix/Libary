@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.io.File;
+
+
 
 /*
  * font sachen:
@@ -13,8 +16,9 @@ import java.awt.Graphics2D;
  * 
  * 
  * VerbesserungsIdeen:
- * -Rahmendicke einstellbar //kann von TextArea genommen werden
- * -abgerundete ecken
+ * -imgButtons
+ * -Rahmendicke einstellbar //bei textarea vorhanden 
+ * 	wird hier aber schwer mit den abgerundeten ecken funktionieren.
  */
 
 public class Button {
@@ -22,12 +26,13 @@ public class Button {
 	private int y;
 	private int width = 100;
 	private int height = 50;
+	private int radius = 0;
 	private double angle = 0;
 	private boolean oval = false;
 	private boolean active = true;
-	private boolean framing = true;
+	private boolean border = true;
 	private Color color = Color.DARK_GRAY;
-	private Color framingColor = Color.GREEN;
+	private Color borderColor = Color.GREEN;
 
 	// text
 	private int fontSize = 40;
@@ -80,14 +85,14 @@ public class Button {
 		this.width = width;
 		this.height = height;
 		this.color = color;
-		this.framingColor = framingColor;
+		this.borderColor = framingColor;
 	}
 
 	public Button(int x, int y, Color color, Color framingColor) {
 		this.x = x;
 		this.y = y;
 		this.color = color;
-		this.framingColor = framingColor;
+		this.borderColor = framingColor;
 	}
 
 //methods--------------------------------------------------------------------------------------------------------------------------------
@@ -106,8 +111,8 @@ public class Button {
 		oval = state;
 	}
 
-	public void setFramingActive(boolean state) {
-		framing = state;
+	public void setBorderActive(boolean state) {
+		border = state;
 	}
 
 	public void setActive(boolean state) {
@@ -118,9 +123,9 @@ public class Button {
 		return active;
 	}
 
-	// farb�nderungen
-	public void setFramingColor(Color color) {
-		this.framingColor = color;
+//ButtonColor---------------------------------------------------------------------
+	public void setBorderColor(Color color) {
+		this.borderColor = color;
 	}
 
 	public void setColor(Color color) {
@@ -130,9 +135,7 @@ public class Button {
 	public void setTextColor(Color color) {
 		this.textColor = color;
 	}
-	// ende farb�nderungen
-
-	// Buttontext
+//Buttontext----------------------------------------------------------------------
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -148,7 +151,16 @@ public class Button {
 	public void setTextFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
-	// ende Buttontext
+	
+//Miscellaneous--------------------------------------------------------------------
+	public void setCornerRadius(int radius) {
+		this.radius = radius;
+	}
+	
+	public void setImg(String url) {
+		File file = new File(url);
+		
+	}
 
 //paint-----------------------------------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
@@ -164,8 +176,8 @@ public class Button {
 				g.rotate(Math.toRadians(angle));
 				g.setColor(color);
 				g.fillOval((int) -width / 2, (int) -height / 2, width, height);
-				if (framing) {
-					g.setColor(framingColor);
+				if (border) {
+					g.setColor(borderColor);
 					g.drawOval((int) -width / 2, (int) -height / 2, width, height);
 				}
 				g.rotate(-Math.toRadians(angle));
@@ -174,10 +186,11 @@ public class Button {
 			} else {
 				// normal button
 				g.setColor(color);
-				g.fillRect(x, y, width, height);
-				if (framing) {
-					g.setColor(framingColor);
-					g.drawRect(x, y, width, height);
+				
+				g.fillRoundRect(x, y, width, height, radius, radius);
+				if (border) {
+					g.setColor(borderColor);
+					g.drawRoundRect(x, y, width, height, radius, radius);
 				}
 			}
 		}
