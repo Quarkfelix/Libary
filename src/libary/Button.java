@@ -39,7 +39,7 @@ public class Button {
 	private double textHeight;
 	// ende text
 
-	// Button Konstruktoren
+//Constructors------------------------------------------------------------------------------------------------------------------------
 	public Button(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -89,8 +89,19 @@ public class Button {
 		this.color = color;
 		this.framingColor = framingColor;
 	}
-	// ende Konstruktoren
 
+//methods--------------------------------------------------------------------------------------------------------------------------------
+	// checkt ob uebergebener punkt enthalten ist
+	public boolean contains(int x, int y) {
+		if (active) {
+			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+//getter-setter-------------------------------------------------------------------------------------------------------------------------	
 	public void setOval(boolean state) {
 		oval = state;
 	}
@@ -139,18 +150,7 @@ public class Button {
 	}
 	// ende Buttontext
 
-	// checkt ob uebergebener punkt enthalten ist
-	public boolean contains(int x, int y) {
-		if (active) {
-			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// *paint bereich* //
-
+//paint-----------------------------------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 		this.drawButton(g);
 		this.drawText(g);
@@ -180,17 +180,7 @@ public class Button {
 					g.drawRect(x, y, width, height);
 				}
 			}
-
-//			g.translate(x + width/2, y + height/2);
-//			g.rotate(Math.toRadians(angle));
-//			g.setColor(color);
-//			g.fillRect((int) -width / 2, (int) -height / 2, width, height);
-//			g.setColor(framingColor);
-//			g.drawRect((int) -width / 2, (int) -height / 2, width, height);
-//			g.rotate(-Math.toRadians(angle));
-//			g.translate(-(x + width/2), -(y + width/2));
 		}
-
 	}
 
 	public void drawText(Graphics2D g) {
@@ -216,5 +206,4 @@ public class Button {
 			throw new IllegalArgumentException("Unexpected value: " + alignment);
 		}
 	}
-
 }
