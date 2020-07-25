@@ -15,6 +15,7 @@ public class GUI extends JFrame{
 		jf.setResizable(false);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		jf.addMouseListener(new MouseHandler());
 		jf.add(draw);
 		jf.requestFocus();
 		jf.setVisible(true);

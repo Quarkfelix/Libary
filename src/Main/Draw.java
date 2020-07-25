@@ -24,5 +24,6 @@ public class Draw extends JPanel{
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			g.drawString("FPS: " + Main.t.fps, 10, 47);
 		}
 }
