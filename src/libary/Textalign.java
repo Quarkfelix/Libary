@@ -1,5 +1,5 @@
 package libary;
 
 public enum Textalign {
-	linksbuendig, rechtsbuendig, mittig;
+	linksbuendig, rechtsbuendig, mittig, under;
 }
