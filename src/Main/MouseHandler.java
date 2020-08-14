@@ -19,8 +19,7 @@ public class MouseHandler implements MouseListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	Draw.surface.checkButtonPress(e.getX(), e.getY() - 37);
-		
+		Draw.surface.checkButtonPress(e.getX(), e.getY() - 26);
 	}
 
 	@Override

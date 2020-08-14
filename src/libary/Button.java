@@ -42,8 +42,6 @@ public class Button {
 	private Color textColor = Color.RED;
 	private String text = "";
 	private Textalign alignment = Textalign.mittig;
-	private double textWidth;
-	private double textHeight;
 	// ende text
 
 //Constructors------------------------------------------------------------------------------------------------------------------------
@@ -102,7 +100,7 @@ public class Button {
 	public boolean contains(int x, int y) {
 		if (active) {
 			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
-				new Animation(this);
+				new ButtonAnimation(this);
 				return true;
 			}
 		}
@@ -175,6 +173,10 @@ public class Button {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
+	public String getText() {
+		return this.text;
+	}
 
 	public void setTextFont(Font font) {
 		this.font = font;
@@ -239,8 +241,8 @@ public class Button {
 		FontMetrics fMetric = g.getFontMetrics(font);
 		g.setFont(font);
 
-		this.textWidth = fMetric.stringWidth(text);
-		this.textHeight = fMetric.getMaxAscent();
+		int textWidth = fMetric.stringWidth(text);
+		int textHeight = fMetric.getMaxAscent();
 
 		switch (this.alignment) {
 		case linksbuendig:
@@ -262,14 +264,18 @@ public class Button {
 	}
 }
 
+
+
+
+
 //die animation in eigener runtime
-class Animation implements Runnable {
+class ButtonAnimation implements Runnable {
 	public long animLength = 100; // in ms 1sec = 1000ms
 	public long depth = 3; // tife in pixeln
 	public Button b;
 
 // Constructor---------------------------------------------------------------------------
-	public Animation(Button b) {
+	public ButtonAnimation(Button b) {
 		this.b = b;
 		Thread t = new Thread(this);
 		t.start();

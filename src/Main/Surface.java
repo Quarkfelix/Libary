@@ -4,26 +4,22 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import libary.Button;
+import libary.Checkbox;
 import libary.Textalign;
 
 
 public class Surface {
-	Button b = new Button(100,100, 200, 150);
+	private Checkbox cb;
 	
 	public Surface() {
-		b.setBorderColor(Color.CYAN);
-		b.setCornerRadius(10);
+		cb = new Checkbox(100,100, 300, 50);
 		
-		b.setText("Test");
-		b.setTextColor(Color.CYAN);
-		b.setTextAlignment(Textalign.mittig);
-		
+		cb.setBackgroundColor(Color.GRAY);
+		cb.setText("Herkunft");
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		if(b.contains(x, y)) {
-			System.out.println("button pressed");
-		}
+		cb.contains(x, y);
 		
 	}
 	
@@ -32,6 +28,6 @@ public class Surface {
 //paint--------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 //		System.out.println("paintrequest");
-		b.paint(g);
+		cb.paint(g);
 	}	
 }

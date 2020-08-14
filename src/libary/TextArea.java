@@ -15,6 +15,7 @@ public class TextArea {
 	private boolean drawOutline = true;
 	private Color outlineColor = Color.black;
 	private Color backgroundColor = Color.white;
+	private boolean background = true;
 	//ende outline
 	
 	// text
@@ -103,14 +104,17 @@ public class TextArea {
 	public void setTextColor(Color color) {
 		this.textColor = color;
 	}
-	// ende text�nderungen
+	// ende textaenderungen
 
-	// textArea �nderungen
-	public void drawOutline(boolean state) {
+	// textArea aenderungen
+	public void setOutlineActive(boolean state) {
 		drawOutline = state;
 	}
 	public void setBackgroundColor(Color color) {
 		this.backgroundColor = color;
+	}
+	public void setBackgroundActive(boolean state) {
+		this.background = false;
 	}
 	public void setThiccness(int ThicnessInPixeln) {
 		thiccness = ThicnessInPixeln;
@@ -122,9 +126,12 @@ public class TextArea {
 	
 	//  *paint bereich* //
 	public void paint(Graphics2D g) {
-		g.setColor(backgroundColor);
-		g.fillRect(x, y, width, height);
-
+		//drawBackground
+		if(this.background) {
+			g.setColor(backgroundColor);
+			g.fillRect(x, y, width, height);
+		}
+		
 		g.setColor(textColor);
 		font = new Font("TimesRoman", Font.PLAIN, fontSize);
 		FontMetrics fMetric = g.getFontMetrics(font);
@@ -145,10 +152,10 @@ public class TextArea {
 			throw new IllegalArgumentException("Unexpected value: " + alignment);
 		}
 		switch (alignment) {
-		case "linksb�ndig":
+		case "linksbuendig":
 			g.drawString(text, x, verticalAlignmentInt);
 			break;
-		case "rechtsb�ndig":
+		case "rechtsbuendig":
 			g.drawString(text, (int)(x + (width - textWidth)) , verticalAlignmentInt);
 			break;
 		case "zentriert":

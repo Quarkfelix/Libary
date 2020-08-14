@@ -1,6 +1,7 @@
 package Main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -24,6 +25,7 @@ public class Draw extends JPanel{
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 			g.drawString("FPS: " + Main.t.fps, 10, 47);
 		}
 }
