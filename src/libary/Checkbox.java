@@ -46,7 +46,7 @@ public class Checkbox {
 		if (x >= (this.x + this.distanceCheckboxAndBorderLeft) && y >= (this.y + 0.5 * (height - checkboxdimension))
 				&& x <= (this.x + this.distanceCheckboxAndBorderLeft + checkboxdimension)
 				&& y <= (this.y + 0.5 * (height - checkboxdimension) + checkboxdimension)) {
-			new CheckboxAnimation(this);
+			//new CheckboxAnimation(this);
 			if(checked) {
 				checked = false;
 			} else {

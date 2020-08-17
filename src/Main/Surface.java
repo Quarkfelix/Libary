@@ -3,23 +3,21 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import libary.Button;
-import libary.Checkbox;
-import libary.Textalign;
+import libary.*;
 
 
 public class Surface {
 	private Checkbox cb;
+	public TextInputField tif;
+	
 	
 	public Surface() {
-		cb = new Checkbox(100,100, 300, 50);
-		
-		cb.setBackgroundColor(Color.GRAY);
-		cb.setText("Herkunft");
+		tif = new TextInputField(200,200, 250, 30);
+		tif.setTextFontSize(100);
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		cb.contains(x, y);
+		
 		
 	}
 	
@@ -28,6 +26,6 @@ public class Surface {
 //paint--------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 //		System.out.println("paintrequest");
-		cb.paint(g);
+		tif.paint(g);
 	}	
 }
