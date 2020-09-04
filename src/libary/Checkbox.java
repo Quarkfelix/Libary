@@ -19,7 +19,7 @@ public class Checkbox {
 	private int distanceCheckboxAndBorderLeft = 10;
 	private int checkboxdimension = 25;
 	private boolean checked = false;
-	
+	private Design design = Design.raw;
 
 	// Text
 	private String text = "";
@@ -40,14 +40,22 @@ public class Checkbox {
 		this.height = height;
 	}
 
+	public Checkbox(int x, int y, int width, int height, String name) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.text = name;
+	}
+
 //methods ----------------------------------------------------------------------------------------------
 	// checkt ob uebergebener punkt enthalten ist
 	public boolean contains(int x, int y) {
 		if (x >= (this.x + this.distanceCheckboxAndBorderLeft) && y >= (this.y + 0.5 * (height - checkboxdimension))
 				&& x <= (this.x + this.distanceCheckboxAndBorderLeft + checkboxdimension)
 				&& y <= (this.y + 0.5 * (height - checkboxdimension) + checkboxdimension)) {
-			//new CheckboxAnimation(this);
-			if(checked) {
+			// new CheckboxAnimation(this);
+			if (checked) {
 				checked = false;
 			} else {
 				checked = true;
@@ -83,19 +91,19 @@ public class Checkbox {
 	public void setCheckboxColor(Color color) {
 		this.checkboxcolor = color;
 	}
-	
+
 	public void setCheckmarkColor(Color color) {
 		this.checkmarkColor = color;
 	}
-	
+
 	public boolean isChecked() {
 		return checked;
 	}
-	
+
 	public void setChecked(boolean state) {
 		checked = state;
 	}
-	
+
 	public void setCheckboxdimension(int checkboxdimension) {
 		this.checkboxdimension = checkboxdimension;
 	}
@@ -112,6 +120,26 @@ public class Checkbox {
 		this.distanceCheckboxAndBorderLeft = distance;
 	}
 
+	public void setDesign(Design design) {
+		this.design = design;
+	}
+	
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 //paint ------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 		if (background) {
@@ -120,23 +148,48 @@ public class Checkbox {
 		}
 		drawCheckbox(g);
 		drawText(g);
-		if(checked) {
+		if (checked) {
 			drawCheckmark(g);
 		}
 	}
 
 	private void drawCheckmark(Graphics2D g) {
 		g.setColor(checkmarkColor);
-		g.drawLine((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
-				(int) (x + this.distanceCheckboxAndBorderLeft + checkboxdimension), (int) (y + 0.5 * (height - checkboxdimension) + checkboxdimension));
-		g.drawLine((int) (x + this.distanceCheckboxAndBorderLeft + checkboxdimension), (int) (y + 0.5 * (height - checkboxdimension)),
-				(int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension) + checkboxdimension));
+		
+		switch (design) {
+		case raw:
+			g.drawLine((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
+					(int) (x + this.distanceCheckboxAndBorderLeft + checkboxdimension),
+					(int) (y + 0.5 * (height - checkboxdimension) + checkboxdimension));
+			g.drawLine((int) (x + this.distanceCheckboxAndBorderLeft + checkboxdimension),
+					(int) (y + 0.5 * (height - checkboxdimension)), (int) (x + this.distanceCheckboxAndBorderLeft),
+					(int) (y + 0.5 * (height - checkboxdimension) + checkboxdimension));
+			break;
+		case design1:
+			g.fillRect((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
+				checkboxdimension + 1, checkboxdimension + 1);
+			break;
+		default:
+			break;
+		}
+		
 	}
-	
+
 	private void drawCheckbox(Graphics2D g) {
 		g.setColor(checkboxcolor);
-		g.drawRect((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
-				checkboxdimension, checkboxdimension);
+		switch (design) {
+		case raw:
+			g.drawRect((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
+					checkboxdimension, checkboxdimension);
+			break;
+
+		case design1:
+			
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 	private void drawText(Graphics2D g) {
@@ -161,7 +214,7 @@ class CheckboxAnimation implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 	}
 
 }

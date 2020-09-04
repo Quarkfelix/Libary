@@ -7,21 +7,18 @@ import libary.*;
 
 
 public class Surface {
-	private Checkbox cb;
-	public TextInputField tif;
+	private DropDownMenu drop;
 	
 	
 	public Surface() {
-		tif = new TextInputField(200,200, 200, 40);
-		tif.setTextFontSize(100);
-		tif.setBackgroundColor(Color.WHITE);
-		tif.setTextLineActive(false);
-		tif.setStyle(Style.round);
-		tif.setDesign(Design.design1);
+		drop = new DropDownMenu(100, 100, 200, 30);
+		drop.addEntrie("Penis");
+		drop.addEntrie("Vagina");
+		drop.setCheckboxDesign(Design.design1);
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		tif.contains(x,y);
+		drop.contains(x, y);
 	}
 	
 	
@@ -29,6 +26,6 @@ public class Surface {
 //paint--------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 //		System.out.println("paintrequest");
-		tif.paint(g);
+		drop.paint(g);
 	}	
 }

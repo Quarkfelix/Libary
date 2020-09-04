@@ -23,6 +23,7 @@ public class Draw extends JPanel{
 			try {
 				surface.paint(g);			
 			} catch (Exception e) {}
+			g.setColor(Color.RED);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 			g.drawString("FPS: " + Main.t.fps, 10, 47);
 		}

@@ -205,7 +205,7 @@ public class TextInputField {
 
 		switch (design) {
 		case design1:
-			g.drawImage(searchbarImage, (int)(x + width*0.80), (int)(y+height*0.15), (int)(height*0.70), (int)(height*0.70), null);
+			g.drawImage(searchbarImage, (int)(x + width*0.85), (int)(y+height*0.2), (int)(height*0.6), (int)(height*0.6), null);
 			break;
 		default:
 			break;

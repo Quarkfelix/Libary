@@ -7,7 +7,6 @@ public class KeyHander implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		Draw.surface.tif.setText(arg0);
 
 	}
 
