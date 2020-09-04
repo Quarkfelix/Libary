@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
-import Main.Draw;
+import javax.imageio.ImageIO;
+
 import javafx.scene.input.KeyCode;
 
 public class TextInputField {
@@ -19,11 +24,16 @@ public class TextInputField {
 	private Graphics2D g;
 	private FontMetrics fMetric;
 	private boolean lock = false;
-	
+	private boolean selected = false;
+	private boolean active = true;
+
 	private Color backgroundColor = Color.GRAY;
 	private Color textLineColor = Color.BLACK;
+	private boolean textLineActive = true;
 	private double distanceTextToBottom = 0.15; // in percent
 	private double distanceTextToLeft = 0.05; // in percent
+	private Style style = Style.round;
+	private Design design = Design.raw;
 
 	// text
 	private String text = "";
@@ -33,10 +43,13 @@ public class TextInputField {
 	private int textWidth = 0;
 	private int textHeight = 500;
 
+	private BufferedImage searchbarImage;
+
 //Constructor ------------------------------------------------------------------------------------------
 	public TextInputField(int x, int y) {
 		this.x = x;
 		this.y = y;
+		setImage("lupe_rechtsschauend.png");
 	}
 
 	public TextInputField(int x, int y, int width, int height) {
@@ -44,14 +57,14 @@ public class TextInputField {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		
+		setImage("lupe_rechtsschauend.png");
 	}
-
+	
 //methods ----------------------------------------------------------------------------------------------
-
-	private void establishFontSize() {		
+	
+	private void establishFontSize() {
 		try {
-			int maxHeight = (int) ((height - (height * distanceTextToBottom))*1.10);
+			int maxHeight = (int) ((height - (height * distanceTextToBottom)) * 1.10);
 			while (textHeight >= maxHeight) {
 				font = new Font("TimesRoman", Font.PLAIN, fontSize);
 				fMetric = g.getFontMetrics(font);
@@ -61,6 +74,18 @@ public class TextInputField {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// checkt ob uebergebener punkt enthalten ist
+	public boolean contains(int x, int y) {
+		if (active) {
+			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
+				selected = true;
+				return true;
+			}
+		}
+		selected = false;
+		return false;
 	}
 
 //getter-setter ----------------------------------------------------------------------------------------
@@ -74,24 +99,27 @@ public class TextInputField {
 
 	public void setText(KeyEvent e) {
 		// rechts rausschreiben sperre
-		try {
-			String textSave = text;
-			if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-				// Shift soll nicht angezeigt werden
-			} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-				text = text.substring(0, text.length() - 1);
-			} else {
-				text = text + e.getKeyChar();
-			}
+		if (selected) {
+			try {
+				String textSave = text;
+				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+					// Shift soll nicht angezeigt werden
+				} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					text = text.substring(0, text.length() - 1);
+				} else {
+					text = text + e.getKeyChar();
+				}
 
-			textWidth = fMetric.stringWidth(text);
-			int diff = (int) ((x + width - (width * distanceTextToLeft)) - (x + (width * distanceTextToLeft)));
-			if (textWidth >= diff) {
-				text = textSave;
+				textWidth = fMetric.stringWidth(text);
+				int diff = (int) ((x + width - (width * distanceTextToLeft)) - (x + (width * distanceTextToLeft)));
+				if (textWidth >= diff) {
+					text = textSave;
+				}
+			} catch (StringIndexOutOfBoundsException exept) {
+				System.out.println("textfeld zu oft backspace gedrückt");
 			}
-		} catch (StringIndexOutOfBoundsException exept) {
-			System.out.println("textfeld zu oft backspace gedrückt");
 		}
+
 	}
 
 	public void setTextFontSize(int fontsize) {
@@ -110,6 +138,32 @@ public class TextInputField {
 		this.distanceTextToLeft = distanceTextToLeft / 10;
 	}
 
+	public void setSelected(boolean state) {
+		this.selected = state;
+	}
+
+	public void setTextLineActive(boolean state) {
+		this.textLineActive = state;
+	}
+	
+	public void setDesign(Design design) {
+		this.design = design;
+	}
+	
+	public void setStyle(Style style) {
+		this.style = style;
+	}
+	
+	public void setImage(String source) {
+		try {
+			searchbarImage = ImageIO.read(this.getClass().getResource(source));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// color
 	public Color getTextLineColor() {
 		return textLineColor;
 	}
@@ -118,23 +172,53 @@ public class TextInputField {
 		this.textLineColor = textLineColor;
 	}
 
+	public void setBackgroundColor(Color color) {
+		this.backgroundColor = color;
+	}
+
 //paint ------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 		this.g = g;
-		drawField();
-		drawText();
-		if(!lock) {
-			establishFontSize();
+		if (active) {
+			drawField();
+			drawText();
+			if (!lock) {
+				establishFontSize();
+			}
 		}
+
 	}
 
 	private void drawField() {
-		g.setColor(backgroundColor);
-		g.fillRect(x, y, width, height);
+		// custom stuff
+		switch (style) {
+		case round:
+			g.setColor(backgroundColor);
+			g.fillRoundRect(x, y, width, height, (int) (width * 0.2), (int) (height));
+			break;
+		case edgy:
+			g.fillRect(x, y, width, height);
+			break;
+		default:
+			break;
+		}
 
-		g.setColor(textLineColor);
-		g.drawLine((int) (x + (width * distanceTextToLeft)), (int) (y + height - (height * distanceTextToBottom)),
-				(int) (x + width - (width * distanceTextToLeft)), (int) (y + height - (height * distanceTextToBottom)));
+		switch (design) {
+		case design1:
+			g.drawImage(searchbarImage, (int)(x + width*0.80), (int)(y+height*0.15), (int)(height*0.70), (int)(height*0.70), null);
+			break;
+		default:
+			break;
+		}
+
+		// general stuff
+		if (textLineActive) {
+			g.setColor(textLineColor);
+			g.drawLine((int) (x + (width * distanceTextToLeft)), (int) (y + height - (height * distanceTextToBottom)),
+					(int) (x + width - (width * distanceTextToLeft)),
+					(int) (y + height - (height * distanceTextToBottom)));
+		}
+
 	}
 
 	private void drawText() {

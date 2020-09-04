@@ -12,13 +12,16 @@ public class Surface {
 	
 	
 	public Surface() {
-		tif = new TextInputField(200,200, 250, 30);
+		tif = new TextInputField(200,200, 200, 40);
 		tif.setTextFontSize(100);
+		tif.setBackgroundColor(Color.WHITE);
+		tif.setTextLineActive(false);
+		tif.setStyle(Style.round);
+		tif.setDesign(Design.design1);
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		
-		
+		tif.contains(x,y);
 	}
 	
 	

@@ -198,6 +198,11 @@ public class Button {
 	public void setImg(BufferedImage img) {
 		this.img = img;
 	}
+	
+	public void setSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
 
 //paint-----------------------------------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
