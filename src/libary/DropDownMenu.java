@@ -9,13 +9,14 @@ public class DropDownMenu {
 	private int y;
 	private int width = 100;
 	private int height = 30;
+	private int radius = 0;
 	private int marginCheckboxes = 10;
 	private boolean unfolded = false;
 
 	private Button initialButton;
 	private ArrayList<Checkbox> entries = new ArrayList<>();
 
-	private Color backgroundColor = Color.GRAY;
+	private Color backgroundColor = new Color(67, 160, 199);
 
 //Constructor ------------------------------------------------------------------------------------------
 	public DropDownMenu(int x, int y) {
@@ -33,16 +34,20 @@ public class DropDownMenu {
 	}
 
 //methods ----------------------------------------------------------------------------------------------
-	public void buttonSetup() {
+	private void buttonSetup() {
 		initialButton = new Button(x, y, width, height);
 		initialButton.setBorderActive(false);
+		initialButton.setColor(new Color(67, 160, 199));
+		initialButton.setText("drop down");
+		initialButton.setTextColor(Color.WHITE);
+		initialButton.setTextFontSize(26);
 	}
-	
-	//if drop menu not open it opens if button pressed
-	//if drop menu open you can select and it returns name of checkbox
-	public String contains(int x, int y) {
+
+	// if drop menu not open it opens if button pressed
+	// if drop menu open you can select and it returns name of checkbox or "name(variable) unchecked"
+	public String contains(int x, int y) {		
 		if (!unfolded) {
-			if(initialButton.contains(x, y)) {
+			if (initialButton.contains(x, y)) {
 				unfolded = true;
 				return "unfolded";
 			}
@@ -50,23 +55,27 @@ public class DropDownMenu {
 		} else {
 			for (Checkbox entrie : entries) {
 				if (entrie.contains(x, y)) {
-					return entrie.getText();
+					if(entrie.isChecked()) {
+						return entrie.getText();
+					} else {
+						return entrie.getText() + " unchecked";
+					}
 				}
 			}
 			unfolded = false;
 			return "folded";
 		}
 	}
-	
 
 //getter-setter ----------------------------------------------------------------------------------------
 	public void addEntrie(String name) {
 		if (entries.size() == 0) {
-			entries.add(new Checkbox(x, y, width, height, name));
+			entries.add(new Checkbox(x, y + 5, width, height, name));
 		} else {
-			entries.add(new Checkbox(x, entries.get(entries.size()-1).getY() + entries.get(entries.size()-1).getHeight() + marginCheckboxes, width, height, name));
+			entries.add(new Checkbox(x, entries.get(entries.size() - 1).getY()
+					+ entries.get(entries.size() - 1).getHeight() + marginCheckboxes, width, height, name));
 		}
-		entries.get(entries.size()-1).setBackgroundActive(false);
+		entries.get(entries.size() - 1).setBackgroundActive(false);
 	}
 
 	public void setCheckboxDesign(Design design) {
@@ -74,8 +83,18 @@ public class DropDownMenu {
 			entrie.setDesign(design);
 		}
 	}
-	
-	
+
+	public Button getInitialButton() {
+		return initialButton;
+	}
+
+	// size
+	public void setRadius(int radius) {
+		this.radius = radius;
+		initialButton.setCornerRadius(radius);
+	}
+	// size ende
+
 	// clolor
 	public void setBackgroundColor(Color color) {
 		this.backgroundColor = color;
@@ -92,10 +111,11 @@ public class DropDownMenu {
 			}
 		}
 	}
-	
+
 	public void drawBackground(Graphics2D g) {
 		g.setColor(backgroundColor);
-		g.fillRect(x, y-5, width, (height + marginCheckboxes) * entries.size() - marginCheckboxes + 10);
+		g.fillRoundRect(x, y, width, (height + marginCheckboxes) * entries.size() - marginCheckboxes + 10, radius,
+				radius);
 	}
 
 }

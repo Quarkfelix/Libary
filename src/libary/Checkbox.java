@@ -9,16 +9,19 @@ public class Checkbox {
 	private int x, y;
 	private int width = 120;
 	private int height = 50;
-
+	private int radius = 0;
+	private int checkBoxThicness = 3;
+	
 	// general
 	private boolean background = true;
 	private Color backgroundcolor = Color.BLACK;
 	private Color checkboxcolor = Color.WHITE;
-	private Color checkmarkColor = Color.RED;
+	private Color checkmarkColor = Color.WHITE;
 	private int distanceCheckoxAndText = 10;
 	private int distanceCheckboxAndBorderLeft = 10;
 	private int checkboxdimension = 25;
 	private boolean checked = false;
+	
 	private Design design = Design.raw;
 
 	// Text
@@ -86,44 +89,17 @@ public class Checkbox {
 	public void setDistanceCheckoxAndText(int distance) {
 		this.distanceCheckoxAndText = distance;
 	}
-
 	// Text ende
-	public void setCheckboxColor(Color color) {
-		this.checkboxcolor = color;
-	}
 
-	public void setCheckmarkColor(Color color) {
-		this.checkmarkColor = color;
-	}
-
-	public boolean isChecked() {
-		return checked;
-	}
-
-	public void setChecked(boolean state) {
-		checked = state;
-	}
-
+	// sizes
 	public void setCheckboxdimension(int checkboxdimension) {
 		this.checkboxdimension = checkboxdimension;
-	}
-
-	public void setBackgroundActive(boolean state) {
-		this.background = state;
-	}
-
-	public void setBackgroundColor(Color color) {
-		this.backgroundcolor = color;
 	}
 
 	public void setDistanceCheckboxAndBorderLeft(int distance) {
 		this.distanceCheckboxAndBorderLeft = distance;
 	}
 
-	public void setDesign(Design design) {
-		this.design = design;
-	}
-	
 	public int getX() {
 		return x;
 	}
@@ -138,6 +114,41 @@ public class Checkbox {
 
 	public int getHeight() {
 		return height;
+	}
+	
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+	// sizes ende
+	
+	//color
+	public void setCheckboxColor(Color color) {
+		this.checkboxcolor = color;
+	}
+
+	public void setCheckmarkColor(Color color) {
+		this.checkmarkColor = color;
+	}
+	//color ende
+	
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean state) {
+		checked = state;
+	}
+
+	public void setBackgroundActive(boolean state) {
+		this.background = state;
+	}
+
+	public void setBackgroundColor(Color color) {
+		this.backgroundcolor = color;
+	}
+
+	public void setDesign(Design design) {
+		this.design = design;
 	}
 
 //paint ------------------------------------------------------------------------------------------------
@@ -155,7 +166,7 @@ public class Checkbox {
 
 	private void drawCheckmark(Graphics2D g) {
 		g.setColor(checkmarkColor);
-		
+
 		switch (design) {
 		case raw:
 			g.drawLine((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
@@ -167,29 +178,22 @@ public class Checkbox {
 			break;
 		case design1:
 			g.fillRect((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
-				checkboxdimension + 1, checkboxdimension + 1);
+					checkboxdimension + 1, checkboxdimension + 1);
 			break;
 		default:
 			break;
 		}
-		
+
 	}
 
 	private void drawCheckbox(Graphics2D g) {
-		g.setColor(checkboxcolor);
-		switch (design) {
-		case raw:
-			g.drawRect((int) (x + this.distanceCheckboxAndBorderLeft), (int) (y + 0.5 * (height - checkboxdimension)),
-					checkboxdimension, checkboxdimension);
-			break;
-
-		case design1:
-			
-			break;
-		default:
-			break;
-		}
+		int x = (int) (this.x + this.distanceCheckboxAndBorderLeft);
+		int y = (int) (this.y + 0.5 * (height - checkboxdimension));
 		
+		g.setColor(checkboxcolor);
+		for (int i = 0; i < this.checkBoxThicness; i++) {
+			g.drawRoundRect(x + i, y + i, checkboxdimension - i * 2, checkboxdimension - i * 2, radius, radius);
+		}
 	}
 
 	private void drawText(Graphics2D g) {

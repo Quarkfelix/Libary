@@ -27,7 +27,8 @@ public class Button {
 	private int y;
 	private int width = 100;
 	private int height = 50;
-	private int radius = 0;
+	private int radiusWidth = 0;
+	private int radiusHeight = 0;
 	private double angle = 0;
 	private boolean oval = false;
 	private boolean active = true;
@@ -191,8 +192,17 @@ public class Button {
 	}
 
 //Miscellaneous--------------------------------------------------------------------
+	public void setCornerRadiusWidth(int radius) {
+		this.radiusWidth = radius;
+	}
+	
+	public void setCornerRadiusHeight(int radius) {
+		this.radiusHeight = radius;
+	}
+	
 	public void setCornerRadius(int radius) {
-		this.radius = radius;
+		this.radiusHeight = radius;
+		this.radiusWidth = radius;
 	}
 
 	public void setImg(BufferedImage img) {
@@ -231,10 +241,10 @@ public class Button {
 			} else {
 				// normal button
 				g.setColor(color);
-				g.fillRoundRect(x, y, width, height, radius, radius);
+				g.fillRoundRect(x, y, width, height, radiusWidth, radiusHeight);
 				if (border) {
 					g.setColor(borderColor);
-					g.drawRoundRect(x, y, width, height, radius, radius);
+					g.drawRoundRect(x, y, width, height, radiusWidth, radiusHeight);
 				}
 			}
 		}

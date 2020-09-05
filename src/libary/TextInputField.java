@@ -15,6 +15,14 @@ import javax.imageio.ImageIO;
 
 import javafx.scene.input.KeyCode;
 
+/*
+	Information wie man diese Klasse benutzt
+	- Erstelle ein TextInputField
+	- Bei jedem KeyInput muss der Methode setText das KeyEvent übergeben werden. Dadurch wird automatisch der buchstabe in das textfeld geschrieben.
+	- des inhalt kann man dann einfach mit gettext aus dem feld entnehmen.
+	- zusätzlich muss noch die contains methode an den mouseinput angebunden werden. 
+*/
+
 public class TextInputField {
 	int x = 100;
 	int y = 100;
@@ -59,9 +67,9 @@ public class TextInputField {
 		this.height = height;
 		setImage("lupe_rechtsschauend.png");
 	}
-	
+
 //methods ----------------------------------------------------------------------------------------------
-	
+
 	private void establishFontSize() {
 		try {
 			int maxHeight = (int) ((height - (height * distanceTextToBottom)) * 1.10);
@@ -145,15 +153,15 @@ public class TextInputField {
 	public void setTextLineActive(boolean state) {
 		this.textLineActive = state;
 	}
-	
+
 	public void setDesign(Design design) {
 		this.design = design;
 	}
-	
+
 	public void setStyle(Style style) {
 		this.style = style;
 	}
-	
+
 	public void setImage(String source) {
 		try {
 			searchbarImage = ImageIO.read(this.getClass().getResource(source));
@@ -176,6 +184,10 @@ public class TextInputField {
 		this.backgroundColor = color;
 	}
 
+	public void setTextColor(Color color) {
+		this.textcolor = color;
+	}
+
 //paint ------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 		this.g = g;
@@ -186,7 +198,6 @@ public class TextInputField {
 				establishFontSize();
 			}
 		}
-
 	}
 
 	private void drawField() {
@@ -205,7 +216,13 @@ public class TextInputField {
 
 		switch (design) {
 		case design1:
-			g.drawImage(searchbarImage, (int)(x + width*0.85), (int)(y+height*0.2), (int)(height*0.6), (int)(height*0.6), null);
+			g.drawImage(searchbarImage, (int) (x + width * 0.83), (int) (y + height * 0.2), (int) (height * 0.6),
+					(int) (height * 0.6), null);
+
+			if (!selected && this.text == "") {
+				g.setColor(this.textcolor);
+				g.drawString("Search", (int) (x + width * 0.10), (int) (y + height * 0.75));
+			}
 			break;
 		default:
 			break;
@@ -234,3 +251,4 @@ public class TextInputField {
 	}
 
 }
+
