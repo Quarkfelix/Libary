@@ -52,7 +52,8 @@ public class TextInputField {
 	private int textHeight = 500;
 
 	private BufferedImage searchbarImage;
-
+	private CurserAnimation curserAnim;
+	
 //Constructor ------------------------------------------------------------------------------------------
 	public TextInputField(int x, int y) {
 		this.x = x;
@@ -66,6 +67,7 @@ public class TextInputField {
 		this.width = width;
 		this.height = height;
 		setImage("lupe_rechtsschauend.png");
+		curserAnim = new CurserAnimation(this);
 	}
 
 //methods ----------------------------------------------------------------------------------------------
@@ -171,6 +173,26 @@ public class TextInputField {
 		}
 	}
 
+	public boolean isSelected() {
+		return selected;	
+	}
+	
+	public int getTextWidth() {
+		return textWidth;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getHeight() {
+		return this.height;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
+
 	// color
 	public Color getTextLineColor() {
 		return textLineColor;
@@ -197,6 +219,7 @@ public class TextInputField {
 			if (!lock) {
 				establishFontSize();
 			}
+			curserAnim.paint(g);
 		}
 	}
 
@@ -220,7 +243,10 @@ public class TextInputField {
 					(int) (height * 0.6), null);
 
 			if (!selected && this.text == "") {
-				g.setColor(this.textcolor);
+				g.setColor(Color.LIGHT_GRAY);
+				font = new Font("TimesRoman", Font.PLAIN, fontSize);
+				fMetric = g.getFontMetrics(font);
+				g.setFont(font);
 				g.drawString("Search", (int) (x + width * 0.10), (int) (y + height * 0.75));
 			}
 			break;
@@ -252,3 +278,52 @@ public class TextInputField {
 
 }
 
+class CurserAnimation implements Runnable {
+	private Thread t;
+	private TextInputField tif;
+	private int curserBlinkInterval = 500;
+	private boolean draw = false;
+
+	public CurserAnimation(TextInputField tif) {
+		this.tif = tif;
+		t = new Thread(this);
+		t.start();
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (tif.isSelected()) {
+				if(draw == true) {
+					draw = false;
+				} else {
+					draw = true;
+				}
+				try {
+					Thread.sleep(curserBlinkInterval);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				draw = false;
+			}
+
+		}
+
+	}
+
+	public void paint(Graphics2D g) {
+		if (draw) {
+			g.setColor(Color.BLACK);
+			g.fillRect(tif.getX() + tif.getTextWidth() + 11, (int) (tif.getY() + (tif.getHeight()*0.2)), 2, (int) (tif.getHeight()*0.6));
+		}
+	}
+
+}

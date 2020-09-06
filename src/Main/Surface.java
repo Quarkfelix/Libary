@@ -8,7 +8,7 @@ import libary.*;
 
 public class Surface {
 	private DropDownMenu drop;
-	private TextInputField tif = new TextInputField(500, 100, 200, 40);
+	public static TextInputField tif = new TextInputField(500, 100, 200, 40);
 	
 	public Surface() {
 		drop = new DropDownMenu(100, 100, 200, 30);
@@ -21,7 +21,7 @@ public class Surface {
 		tif.setDesign(Design.design1);
 		tif.setStyle(Style.round);
 		tif.setTextLineActive(false);
-		tif.setTextColor(Color.LIGHT_GRAY);
+		tif.setTextColor(Color.DARK_GRAY);
 	}
 	
 	public void checkButtonPress(int x, int y) {
