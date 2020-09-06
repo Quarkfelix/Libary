@@ -116,6 +116,8 @@ public class TextInputField {
 					// Shift soll nicht angezeigt werden
 				} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					text = text.substring(0, text.length() - 1);
+				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					this.setSelected(false);
 				} else {
 					text = text + e.getKeyChar();
 				}
@@ -152,6 +154,10 @@ public class TextInputField {
 		this.selected = state;
 	}
 
+	public boolean isSelected() {
+		return selected;	
+	}
+	
 	public void setTextLineActive(boolean state) {
 		this.textLineActive = state;
 	}
@@ -171,10 +177,6 @@ public class TextInputField {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public boolean isSelected() {
-		return selected;	
 	}
 	
 	public int getTextWidth() {
