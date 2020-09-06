@@ -49,9 +49,9 @@ public class DropDownMenu {
 		if (!unfolded) {
 			if (initialButton.contains(x, y)) {
 				unfolded = true;
-				return "unfolded";
+				return null;
 			}
-			return "";
+			return null;
 		} else {
 			for (Checkbox entrie : entries) {
 				if (entrie.contains(x, y)) {
@@ -63,7 +63,7 @@ public class DropDownMenu {
 				}
 			}
 			unfolded = false;
-			return "folded";
+			return null;
 		}
 	}
 
@@ -86,6 +86,20 @@ public class DropDownMenu {
 
 	public Button getInitialButton() {
 		return initialButton;
+	}
+	
+	public boolean isUnfolded() {
+		return unfolded;
+	}
+	
+	public ArrayList<Checkbox> getCheckedBoxes() {
+		ArrayList<Checkbox> checkedBoxes = new ArrayList<>();
+		for (Checkbox entrie : entries) {
+			if(entrie.isChecked()) {
+				checkedBoxes.add(entrie);
+			}
+		}
+		return checkedBoxes;
 	}
 
 	// size
