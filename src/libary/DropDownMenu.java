@@ -84,13 +84,21 @@ public class DropDownMenu {
 		}
 	}
 
+	//initialButton
 	public Button getInitialButton() {
 		return initialButton;
 	}
 	
+	public void setTitle(String text) {
+		initialButton.setText(text);
+	}
+	//ende initialButton
+	
 	public boolean isUnfolded() {
 		return unfolded;
 	}
+	
+	
 	
 	public ArrayList<Checkbox> getCheckedBoxes() {
 		ArrayList<Checkbox> checkedBoxes = new ArrayList<>();

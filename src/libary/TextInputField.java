@@ -230,7 +230,7 @@ public class TextInputField {
 		switch (style) {
 		case round:
 			g.setColor(backgroundColor);
-			g.fillRoundRect(x, y, width, height, (int) (width * 0.2), (int) (height));
+			g.fillRoundRect(x, y, width, height, (int) (width * 0.15), (int) (height));
 			break;
 		case edgy:
 			g.fillRect(x, y, width, height);
@@ -324,7 +324,14 @@ class CurserAnimation implements Runnable {
 	public void paint(Graphics2D g) {
 		if (draw) {
 			g.setColor(Color.BLACK);
-			g.fillRect(tif.getX() + tif.getTextWidth() + 11, (int) (tif.getY() + (tif.getHeight()*0.2)), 2, (int) (tif.getHeight()*0.6));
+			int x;
+			if(tif.getTextWidth() < 7) {
+				x = tif.getX() + tif.getTextWidth() + 7; 
+			} else {
+				x = tif.getX() + tif.getTextWidth();
+			}
+			
+			g.fillRect(x + 21, (int) (tif.getY() + (tif.getHeight()*0.2)), 2, (int) (tif.getHeight()*0.6));
 		}
 	}
 

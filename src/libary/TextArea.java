@@ -114,7 +114,7 @@ public class TextArea {
 		this.backgroundColor = color;
 	}
 	public void setBackgroundActive(boolean state) {
-		this.background = false;
+		this.background = state;
 	}
 	public void setThiccness(int ThicnessInPixeln) {
 		thiccness = ThicnessInPixeln;
@@ -146,7 +146,7 @@ public class TextArea {
 			this.verticalAlignmentInt = y + height;
 			break;
 		case "center":
-			verticalAlignmentInt = (int) (y + height/2 + textHeight/3 - 4) ;
+			verticalAlignmentInt = (int) (y + height/2 + textHeight/4);
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + alignment);
