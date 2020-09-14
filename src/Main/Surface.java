@@ -16,6 +16,7 @@ public class Surface {
 		drop.addEntrie("Vagina");
 		drop.setCheckboxDesign(Design.design1);
 		drop.setRadius(10);
+		drop.setOneCheckMode(true);
 		
 		tif.setBackgroundColor(Color.WHITE);
 		tif.setDesign(Design.design1);
@@ -25,27 +26,7 @@ public class Surface {
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		String key = drop.contains(x, y);
-		switch (key) {
-		case "Penis":
-			System.out.println("penis");
-			break;
-		
-		case "Penis unchecked":
-			System.out.println("penis unchecked");
-			break;
-			
-		case "Vagina":
-			System.out.println("vagina");
-			break;
-
-		case "": 
-			System.out.println("leer");
-			break;
-		default:
-			break;
-		}
-		
+		drop.contains(x, y);
 		tif.contains(x, y);
 	}
 	

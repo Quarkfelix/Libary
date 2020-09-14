@@ -16,7 +16,9 @@ public class DropDownMenu {
 	private Button initialButton;
 	private ArrayList<Checkbox> entries = new ArrayList<>();
 
+	// Settings
 	private Color backgroundColor = new Color(67, 160, 199);
+	private boolean oneCheckMode = false;
 
 //Constructor ------------------------------------------------------------------------------------------
 	public DropDownMenu(int x, int y) {
@@ -44,18 +46,37 @@ public class DropDownMenu {
 	}
 
 	// if drop menu not open it opens if button pressed
-	// if drop menu open you can select and it returns name of checkbox or "name(variable) unchecked"
-	public String contains(int x, int y) {		
+	// if drop menu open you can select and it returns name of checkbox or
+	// "name(variable) unchecked"
+	public String contains(int x, int y) {
 		if (!unfolded) {
 			if (initialButton.contains(x, y)) {
 				unfolded = true;
 				return null;
 			}
 			return null;
+		} else if (oneCheckMode) {															// ->
+			for (Checkbox entrie : entries) {
+				if (entrie.contains(x, y)) {
+					for (int j = 0; j < entries.size(); j++) {
+						if(entrie != entries.get(j)) {
+							entries.get(j).setChecked(false);
+						}
+					}
+					if (!entrie.isChecked()) {
+						entrie.setChecked(false);
+					} else {
+						entrie.setChecked(true);
+					}
+					return entrie.getText();
+				}
+			}
+			unfolded = false;
+			return null;																	// <- teil davor ist noch verbesserungswürdig aber er funktioniert erstmal
 		} else {
 			for (Checkbox entrie : entries) {
 				if (entrie.contains(x, y)) {
-					if(entrie.isChecked()) {
+					if (entrie.isChecked()) {
 						return entrie.getText();
 					} else {
 						return entrie.getText() + " unchecked";
@@ -84,26 +105,28 @@ public class DropDownMenu {
 		}
 	}
 
-	//initialButton
+	// initialButton
 	public Button getInitialButton() {
 		return initialButton;
 	}
-	
+
 	public void setTitle(String text) {
 		initialButton.setText(text);
 	}
-	//ende initialButton
-	
+	// ende initialButton
+
 	public boolean isUnfolded() {
 		return unfolded;
 	}
-	
-	
-	
+
+	public void setOneCheckMode(boolean state) {
+		this.oneCheckMode = state;
+	}
+
 	public ArrayList<Checkbox> getCheckedBoxes() {
 		ArrayList<Checkbox> checkedBoxes = new ArrayList<>();
 		for (Checkbox entrie : entries) {
-			if(entrie.isChecked()) {
+			if (entrie.isChecked()) {
 				checkedBoxes.add(entrie);
 			}
 		}
