@@ -81,6 +81,10 @@ public class Checkbox {
 		return false;
 	}
 	
+	public void reset() {
+		this.checked = false;
+	}
+	
 //getter-setter ----------------------------------------------------------------------------------------
 	// Text
 	public void setText(String text) {

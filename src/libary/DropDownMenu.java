@@ -87,6 +87,13 @@ public class DropDownMenu {
 			return null;
 		}
 	}
+	
+	public void reset() {
+		for (Checkbox entrie : entries) {
+			entrie.reset();
+		}
+		this.unfolded = false;
+	}
 
 //getter-setter ----------------------------------------------------------------------------------------
 	public void addEntrie(String name) {

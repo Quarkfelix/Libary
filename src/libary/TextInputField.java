@@ -97,6 +97,11 @@ public class TextInputField {
 		selected = false;
 		return false;
 	}
+	
+	public void reset() {
+		this.selected = false;
+		this.text = "";
+	}
 
 //getter-setter ----------------------------------------------------------------------------------------
 	public String getText() {
