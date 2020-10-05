@@ -7,7 +7,7 @@ public class KeyHander implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		Surface.tif.setText(arg0);
+		System.out.println(arg0.getKeyCode());
 	}
 
 	@Override

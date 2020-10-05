@@ -42,6 +42,7 @@ public class Button {
 	private Font font;
 	private Color textColor = Color.RED;
 	private String text = "";
+	private boolean textActive = true;
 	private Textalign alignment = Textalign.mittig;
 	// ende text
 
@@ -190,6 +191,10 @@ public class Button {
 	public void setTextFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
+	
+	public void setTextActive(boolean state) {
+		this.textActive = state;
+	}
 
 //Miscellaneous--------------------------------------------------------------------
 	public void setCornerRadiusWidth(int radius) {
@@ -217,7 +222,9 @@ public class Button {
 //paint-----------------------------------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
 		this.drawButton(g);
-		this.drawText(g);
+		if(this.textActive) {
+			this.drawText(g);
+		}
 	}
 
 	private void drawButton(Graphics2D g) {

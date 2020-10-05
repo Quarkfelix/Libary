@@ -10,7 +10,7 @@ public class GUI extends JFrame{
 		jf = new JFrame();
 		draw = new Draw();
 		
-		jf.setSize(800,600);
+		jf.setSize(1000, 700);
 		jf.setLocationRelativeTo(null);
 		jf.setResizable(false);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
