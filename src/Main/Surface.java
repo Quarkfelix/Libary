@@ -10,7 +10,8 @@ public class Surface {
 	private Screenkeyboard keyboard;
 	
 	public Surface() {
-		keyboard = new Screenkeyboard(100, 200, 800, 250);
+		keyboard = new Screenkeyboard(100, 200, 1000, 350);
+		keyboard.setBackgroundCornerRadius(20);
 	}
 	
 	public void checkButtonPress(int x, int y) {
