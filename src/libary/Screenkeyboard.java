@@ -71,7 +71,7 @@ public class Screenkeyboard {
 						if (key == 500) {
 							numpad();
 						} else if (key == 501) {
-							exit();
+							close();
 						} else if (key != 0) {
 							try {
 								Robot robot = new Robot();
@@ -134,8 +134,14 @@ public class Screenkeyboard {
 		keys[11][2].setImageY(50);
 	}
 
-	public void exit() {
+	public void close() {
 		active = false;
+		if(numActive)
+			numpad();
+	}
+	
+	public void open() {
+		active = true;
 	}
 
 	private int stringToKey(String stringKey) {
@@ -398,16 +404,16 @@ public class Screenkeyboard {
 
 //getter-setter ----------------------------------------------------------------------------------------
 
-	public void setActive(boolean state) {
-		this.active = state;
-	}
-
 	public void setFullscreen(boolean fullscreen) {
 		this.fullscreen = fullscreen;
 	}
 
-	public void setClickAnimationLength(int animLength) {
-		//alle buttons durch setAnimLength aufrufen 
+	public void setClickAnimationLength(int animLengthInMiliseconds) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < keys.length; j++) {
+				keys[j][i].setAnimLength(animLengthInMiliseconds);
+			}
+		}
 	}
 	
 	// background

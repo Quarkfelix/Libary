@@ -119,8 +119,8 @@ public class Button {
 	}
 
 //getter-setter-------------------------------------------------------------------------------------------------------------------------	
-	public void setAnimLength(int animLength) {
-		this.animLength = animLength;
+	public void setAnimLength(int animLengthInMiliseconds) {
+		this.animLength = animLengthInMiliseconds;
 	}
 	
 	public void setOval(boolean state) {
