@@ -45,15 +45,17 @@ public class TextInputField {
 
 	// text
 	private String text = "";
+	
 	private Color textcolor = Color.WHITE;
 	private Font font;
+	private String fontname = "Copperplate Gothic Bold";
 	private int fontSize = 500;
 	private int textWidth = 0;
 	private int textHeight = 500;
 
 	private BufferedImage searchbarImage;
 	private CurserAnimation curserAnim;
-	
+
 //Constructor ------------------------------------------------------------------------------------------
 	public TextInputField(int x, int y) {
 		this.x = x;
@@ -97,7 +99,7 @@ public class TextInputField {
 		selected = false;
 		return false;
 	}
-	
+
 	public void reset() {
 		this.selected = false;
 		this.text = "";
@@ -136,7 +138,16 @@ public class TextInputField {
 				System.out.println("textfeld zu oft backspace gedrückt");
 			}
 		}
-
+	}
+	
+	public void setTextFont(Font font) {
+		this.font = font;
+		this.fontname = font.getName();
+		this.fontSize = font.getSize();
+	}
+	
+	public void setTextFont(String name) {
+		this.fontname = name;
 	}
 
 	public void setTextFontSize(int fontsize) {
@@ -160,9 +171,9 @@ public class TextInputField {
 	}
 
 	public boolean isSelected() {
-		return selected;	
+		return selected;
 	}
-	
+
 	public void setTextLineActive(boolean state) {
 		this.textLineActive = state;
 	}
@@ -183,19 +194,19 @@ public class TextInputField {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int getTextWidth() {
 		return textWidth;
 	}
-	
+
 	public int getX() {
 		return x;
 	}
-	
+
 	public int getHeight() {
 		return this.height;
 	}
-	
+
 	public int getY() {
 		return this.y;
 	}
@@ -273,7 +284,7 @@ public class TextInputField {
 
 	private void drawText() {
 		g.setColor(textcolor);
-		font = new Font("TimesRoman", Font.PLAIN, fontSize);
+		font = new Font(fontname, Font.PLAIN, fontSize);
 		fMetric = g.getFontMetrics(font);
 		g.setFont(font);
 		textWidth = fMetric.stringWidth(text);
@@ -307,7 +318,7 @@ class CurserAnimation implements Runnable {
 				e1.printStackTrace();
 			}
 			if (tif.isSelected()) {
-				if(draw == true) {
+				if (draw == true) {
 					draw = false;
 				} else {
 					draw = true;
@@ -330,13 +341,13 @@ class CurserAnimation implements Runnable {
 		if (draw) {
 			g.setColor(Color.BLACK);
 			int x;
-			if(tif.getTextWidth() < 7) {
-				x = tif.getX() + tif.getTextWidth() + 7; 
+			if (tif.getTextWidth() < 7) {
+				x = tif.getX() + tif.getTextWidth() + 7;
 			} else {
 				x = tif.getX() + tif.getTextWidth();
 			}
-			
-			g.fillRect(x + 21, (int) (tif.getY() + (tif.getHeight()*0.2)), 2, (int) (tif.getHeight()*0.6));
+
+			g.fillRect(x + 21, (int) (tif.getY() + (tif.getHeight() * 0.2)), 2, (int) (tif.getHeight() * 0.6));
 		}
 	}
 

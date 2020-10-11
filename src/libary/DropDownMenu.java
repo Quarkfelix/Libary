@@ -111,6 +111,21 @@ public class DropDownMenu {
 			entrie.setDesign(design);
 		}
 	}
+	
+	public void setTextFont(String fontName) {
+		for (Checkbox entrie : entries) {
+			entrie.setTextFont(fontName);
+		}
+		initialButton.setTextFont(fontName);
+	}
+	
+	public void setTextFontSize(int size) {
+		for (Checkbox entrie : entries) {
+			entrie.setTextFontSize(size);
+		}
+		initialButton.setTextFontSize(size);
+	}
+
 
 	// initialButton
 	public Button getInitialButton() {

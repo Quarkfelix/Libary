@@ -21,6 +21,7 @@ public class TextArea {
 	// text
 	private int fontSize = 40;
 	private Font font;
+	private String fontName = "Copperplate Gothic Bold";
 	private Color textColor = Color.black;
 	private String text = "";
 	private String alignment = "zentriert";
@@ -75,7 +76,7 @@ public class TextArea {
 	}
 	//ende Konstruktoren
 	
-	// textï¿½nderungen
+	// textänderungen
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -86,6 +87,10 @@ public class TextArea {
 
 	public void setTextFont(Font font) {
 		this.font = font;
+	}
+	
+	public void setTextFont(String fontName) {
+		this.fontName = fontName;
 	}
 
 	/*linksbï¿½ndig rechtsbï¿½ndig zentriert*/
@@ -133,7 +138,7 @@ public class TextArea {
 		}
 		
 		g.setColor(textColor);
-		font = new Font("TimesRoman", Font.PLAIN, fontSize);
+		font = new Font(fontName, Font.PLAIN, fontSize);
 		FontMetrics fMetric = g.getFontMetrics(font);
 		g.setFont(font);
 		this.textWidth = fMetric.stringWidth(text);

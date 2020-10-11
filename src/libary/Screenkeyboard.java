@@ -22,8 +22,11 @@ public class Screenkeyboard {
 	public int x = 0;
 	public int y = 0;
 	public boolean fullscreen = false;
-	
+	private boolean active = true;
 	public int cornerRadius = 70;
+
+	// numpad
+	private boolean numActive = false;
 
 	// background
 	private boolean backgroundActive = true;
@@ -60,26 +63,29 @@ public class Screenkeyboard {
 
 //methods -----------------------------------------------------------------------------------------------
 	public void checkPress(int x, int y) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < keys.length; j++) {
-				if (keys[j][i].contains(x, y)) {
-					int key = stringToKey(keys[j][i].getText());
-					if (key == 500) {
-						numpad();
-					} else if (key == 501) {
-						exit();
-					} else if (key != 0) {
-						try {
-							Robot robot = new Robot();
-							robot.keyPress(key);
-							robot.keyRelease(key);
-						} catch (AWTException e1) {
-							e1.printStackTrace();
+		if (active) {
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < keys.length; j++) {
+					if (keys[j][i].contains(x, y)) {
+						int key = stringToKey(keys[j][i].getText());
+						if (key == 500) {
+							numpad();
+						} else if (key == 501) {
+							exit();
+						} else if (key != 0) {
+							try {
+								Robot robot = new Robot();
+								robot.keyPress(key);
+								robot.keyRelease(key);
+							} catch (AWTException e1) {
+								e1.printStackTrace();
+							}
 						}
 					}
 				}
 			}
 		}
+
 	}
 
 	private void setupKeys() {
@@ -88,13 +94,40 @@ public class Screenkeyboard {
 		declareButtonNames();
 	}
 
-	/* folds out and closes number row */
+	/* switches between numbers and letters */
 	public void numpad() {
-
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < keys.length; j++) {
+				keys[j][i].setText("");
+			}
+		}
+		if (!numActive) {
+			numActive = true;
+			try {
+				keys[11][2].setImg(ImageIO.read(this.getClass().getResource("Textpad.png")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			declareButtonNumbers();
+		} else {
+			numActive = false;
+			try {
+				keys[11][2].setImg(ImageIO.read(this.getClass().getResource("numpad.png")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			declareButtonNames();
+		}
+		
+		keys[11][2].setImageWidth(25);
+		keys[11][2].setImageX(50);
+		keys[11][2].setImageY(50);
 	}
 
 	public void exit() {
-
+		active = false;
 	}
 
 	private int stringToKey(String stringKey) {
@@ -168,15 +201,43 @@ public class Screenkeyboard {
 		keys[12][0].setX(keys[11][0].getX());
 		keys[12][0].setWidth(widthbutton + xdiff);
 		keys[12][0].setTextActive(false);
+		try {
+			keys[12][0].setImg(ImageIO.read(this.getClass().getResource("backspace hohl white with x-cutout.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		keys[12][0].setTrueImageWidth(25);
+		keys[12][0].setTrueImageHeight(20);
+		keys[12][0].setImageX(15);
+		keys[12][0].setImageY(25);
 		// enter
 		keys[11][1].setActive(false);
 		keys[12][1].setX(keys[11][1].getX());
 		keys[12][1].setWidth((int) (widthbutton + xdiff - widthbutton * 0.40));
 		keys[12][1].setTextActive(false);
+		try {
+			keys[12][1].setImg(ImageIO.read(this.getClass().getResource("enter.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		keys[12][1].setImageWidth(37);
+		keys[12][1].setImageX(20);
+		keys[12][1].setImageY(25);
 		// numb/3rd row
 		keys[0][2].setActive(false);
 		keys[12][2].setActive(false);
 		keys[11][2].setTextActive(false);
+		try {
+			keys[11][2].setImg(ImageIO.read(this.getClass().getResource("numpad.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		keys[11][2].setImageWidth(25);
+		keys[11][2].setImageX(50);
+		keys[11][2].setImageY(50);
 		// space
 		for (int i = 1; i < 9; i++)
 			keys[i][3].setActive(false);
@@ -191,6 +252,19 @@ public class Screenkeyboard {
 		keys[12][3].setTextActive(false);
 		keys[12][3].setWidth((int) (widthbutton + widthbutton * 0.5));
 		keys[12][3].setX((int) (keys[12][3].getX() - widthbutton * 0.5));
+		try {
+			keys[12][3].setImg(ImageIO.read(this.getClass().getResource("keyboard down.png")));
+			keys[0][3].setImg(ImageIO.read(this.getClass().getResource("keyboard down.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		keys[12][3].setImageWidth(32);
+		keys[12][3].setImageX(50);
+		keys[12][3].setImageY(50);
+		keys[0][3].setImageWidth(32);
+		keys[0][3].setImageX(50);
+		keys[0][3].setImageY(50);
 
 		// optics-----------------------------------------
 		for (int j = 0; j < 4; j++) {
@@ -205,8 +279,6 @@ public class Screenkeyboard {
 	}
 
 	private void declareButtonNames() {
-		// button names
-		// -----------------------------------------------------------------------------
 		keys[0][0].setText("Q");
 		keys[1][0].setText("W");
 		keys[2][0].setText("E");
@@ -261,6 +333,61 @@ public class Screenkeyboard {
 		keys[12][3].setText("exit"); // 44
 	}
 
+	private void declareButtonNumbers() {
+		keys[0][0].setText("1");
+		keys[1][0].setText("2");
+		keys[2][0].setText("3");
+		keys[3][0].setText("4");
+		keys[4][0].setText("5");
+		keys[5][0].setText("6");
+		keys[6][0].setText("7");
+		keys[7][0].setText("8");
+		keys[8][0].setText("9");
+		keys[9][0].setText("0");
+		keys[10][0].setText("");
+		keys[11][0].setText("A");
+		keys[12][0].setText("BACKSPACE"); // 11
+		keys[0][1].setText("B");
+		keys[1][1].setText("C");
+		keys[2][1].setText("D");
+		keys[3][1].setText("E");
+		keys[4][1].setText("F");
+		keys[5][1].setText("");
+		keys[6][1].setText("");
+		keys[7][1].setText("");
+		keys[8][1].setText("");
+		keys[9][1].setText("");
+		keys[10][1].setText("");
+		keys[11][1].setText("");
+		keys[12][1].setText("ENTER"); // 22
+		keys[0][2].setText("");
+		keys[1][2].setText("");
+		keys[2][2].setText("");
+		keys[3][2].setText("");
+		keys[4][2].setText("");
+		keys[5][2].setText("");
+		keys[6][2].setText("");
+		keys[7][2].setText("");
+		keys[8][2].setText("");
+		keys[9][2].setText("");
+		keys[10][2].setText("");
+		keys[11][2].setText("numb");
+		keys[12][2].setText(""); // 33
+		keys[0][3].setText("exit");
+		keys[1][3].setText("");
+		keys[2][3].setText("");
+		keys[3][3].setText("");
+		keys[4][3].setText("");
+		keys[5][3].setText("");
+		keys[6][3].setText("");
+		keys[7][3].setText("");
+		keys[8][3].setText("");
+		keys[9][3].setText("SPACE");
+		keys[10][3].setText("");
+		keys[11][3].setText("");
+		keys[12][3].setText("exit"); // 44
+	}
+
 //getter-setter ----------------------------------------------------------------------------------------
 	public void setFontSize(int fontSize) {
 		this.fontSize = fontSize;
@@ -269,6 +396,10 @@ public class Screenkeyboard {
 		}
 	}
 
+	public void setActive(boolean state) {
+		this.active = state;
+	}
+	
 	// background
 	public void setBackgroundActive(boolean state) {
 		this.backgroundActive = state;
@@ -287,8 +418,8 @@ public class Screenkeyboard {
 	public void setBackgroundCornerRadius(int radius) {
 		this.backgroundCornerRadius = radius;
 	}
-	
-	//text
+
+	// text
 	public void setTextFontSize(int size) {
 		this.fontSize = (width + height) / size;
 		for (int i = 0; i < 4; i++) {
@@ -297,7 +428,7 @@ public class Screenkeyboard {
 			}
 		}
 	}
-	
+
 	public void setTextFont(Font font) {
 		this.font = font;
 		for (int i = 0; i < 4; i++) {
@@ -306,7 +437,7 @@ public class Screenkeyboard {
 			}
 		}
 	}
-	
+
 	public void setTextColor(Color color) {
 		this.textColor = color;
 		for (int i = 0; i < 4; i++) {
@@ -318,10 +449,13 @@ public class Screenkeyboard {
 
 //paint ------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
-		if (backgroundActive) {
-			drawBackground(g);
+		if (active) {
+			if (backgroundActive) {
+				drawBackground(g);
+			}
+			drawKeys(g);
 		}
-		drawKeys(g);
+
 	}
 
 	private void drawBackground(Graphics2D g) {

@@ -27,6 +27,7 @@ public class Checkbox {
 	// Text
 	private String text = "";
 	private Color textcolor = Color.WHITE;
+	private String fontname = "Copperplate Gothic Bold";
 	private Font font;
 	private int fontSize = 30;
 
@@ -105,6 +106,16 @@ public class Checkbox {
 
 	public void setDistanceCheckoxAndText(int distance) {
 		this.distanceCheckoxAndText = distance;
+	}
+	
+	public void setTextFont(Font font) {
+		this.font = font;
+		this.fontname = font.getName();
+		this.fontSize = font.getSize();
+	}
+	
+	public void setTextFont(String name) {
+		this.fontname = name;
 	}
 	// Text ende
 
@@ -215,7 +226,7 @@ public class Checkbox {
 
 	private void drawText(Graphics2D g) {
 		g.setColor(textcolor);
-		font = new Font("TimesRoman", Font.PLAIN, fontSize);
+		font = new Font(fontname, Font.PLAIN, fontSize);
 		FontMetrics fMetric = g.getFontMetrics(font);
 		g.setFont(font);
 		int textWidth = fMetric.stringWidth(text);

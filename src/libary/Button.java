@@ -40,11 +40,17 @@ public class Button {
 	// text
 	private int fontSize = 40;
 	private Font font;
+	private String fontname = "Copperplate Gothic Bold";
 	private Color textColor = Color.RED;
 	private String text = "";
 	private boolean textActive = true;
 	private Textalign alignment = Textalign.mittig;
-	// ende text
+
+	// img
+	private int imgX;
+	private int imgY;
+	private int imgwidth;
+	private int imgheight;
 
 //Constructors------------------------------------------------------------------------------------------------------------------------
 	public Button(int x, int y) {
@@ -108,7 +114,7 @@ public class Button {
 		}
 		return false;
 	}
-	
+
 //getter-setter-------------------------------------------------------------------------------------------------------------------------	
 	public void setOval(boolean state) {
 		oval = state;
@@ -158,7 +164,57 @@ public class Button {
 		this.height = height;
 	}
 
-//ButtonColor---------------------------------------------------------------------
+	// img
+	public void setImg(BufferedImage img) {
+		this.img = img;
+		setImageWidth(width);
+		setImageX(50);
+		setImageY(50);
+	}
+	
+	public void setImageX(double xInPercentToLeftButtonborder) {
+		double factor = xInPercentToLeftButtonborder/100;
+		imgX = (int) (x + width*factor - imgwidth/2);
+	}
+
+	public void setImageY(double yInPercentToButtontop) {
+		double factor = yInPercentToButtontop/100;
+		imgY = (int) (y + height*factor - imgheight/2);
+	}
+
+	public void setImageWidth(int imgwidth) {
+		if (img != null) {
+			this.imgwidth = imgwidth;
+			double resizingfactor = (double) (imgwidth) / img.getWidth();
+			this.imgheight = (int) (img.getHeight() * resizingfactor);
+		}
+	}
+
+	public void setImageHeight(int imgheight) {
+		if (img != null) {
+			this.imgheight = imgheight;
+			double resizingfactor = (double) (imgheight) / img.getHeight();
+			imgwidth = (int) (img.getWidth() * resizingfactor);
+		}
+	}
+
+	public void setTrueImageWidth(int imgwidth) {
+		this.imgwidth = imgwidth;
+	}
+
+	public void setTrueImageHeight(int imgheight) {
+		this.imgheight = imgheight;
+	}
+
+	/* percent is measured in the width of the button */
+	public void setImageSize(double sizeInPercentToButton) {
+		double size = sizeInPercentToButton / 100;
+		this.imgwidth = (int) (width * size);
+		double resizingfactor = (double) (imgwidth) / img.getWidth();
+		this.imgheight = (int) (img.getHeight() * resizingfactor);
+	}
+
+	// ButtonColor
 	public void setBorderColor(Color color) {
 		this.borderColor = color;
 	}
@@ -171,17 +227,23 @@ public class Button {
 		this.textColor = color;
 	}
 
-//Buttontext----------------------------------------------------------------------
+	// Buttontext
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	public String getText() {
 		return this.text;
 	}
 
 	public void setTextFont(Font font) {
 		this.font = font;
+		this.fontname = font.getName();
+		this.fontSize = font.getSize();
+	}
+	
+	public void setTextFont(String name) {
+		this.fontname = name;
 	}
 
 	public void setTextAlignment(Textalign alignment) {
@@ -191,29 +253,25 @@ public class Button {
 	public void setTextFontSize(int fontSize) {
 		this.fontSize = fontSize;
 	}
-	
+
 	public void setTextActive(boolean state) {
 		this.textActive = state;
 	}
 
-//Miscellaneous--------------------------------------------------------------------
+	// Miscellaneous
 	public void setCornerRadiusWidth(int radius) {
 		this.radiusWidth = radius;
 	}
-	
+
 	public void setCornerRadiusHeight(int radius) {
 		this.radiusHeight = radius;
 	}
-	
+
 	public void setCornerRadius(int radius) {
 		this.radiusHeight = radius;
 		this.radiusWidth = radius;
 	}
 
-	public void setImg(BufferedImage img) {
-		this.img = img;
-	}
-	
 	public void setSize(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -221,18 +279,16 @@ public class Button {
 
 //paint-----------------------------------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
-		this.drawButton(g);
-		if(this.textActive) {
-			this.drawText(g);
-		}
+		drawButton(g);
+		if (img != null)
+			drawImage(g);
+		if (textActive)
+			drawText(g);
 	}
 
 	private void drawButton(Graphics2D g) {
 		if (active) {
-			if (img != null) {
-				// img auf button
-				g.drawImage(img, x, y, width, height, null);
-			} else if (oval) {
+			if (oval) {
 				// oval button
 				g.translate(x + width / 2, y + height / 2);
 				g.rotate(Math.toRadians(angle));
@@ -244,11 +300,11 @@ public class Button {
 				}
 				g.rotate(-Math.toRadians(angle));
 				g.translate(-(x + width / 2), -(y + width / 2));
-
 			} else {
 				// normal button
 				g.setColor(color);
 				g.fillRoundRect(x, y, width, height, radiusWidth, radiusHeight);
+				
 				if (border) {
 					g.setColor(borderColor);
 					g.drawRoundRect(x, y, width, height, radiusWidth, radiusHeight);
@@ -257,9 +313,13 @@ public class Button {
 		}
 	}
 
+	private void drawImage(Graphics2D g) {
+		g.drawImage(img, imgX, imgY, imgwidth, imgheight, null);
+	}
+
 	private void drawText(Graphics2D g) {
 		g.setColor(textColor);
-		font = new Font("TimesRoman", Font.PLAIN, fontSize);
+		font = new Font(fontname, Font.PLAIN, fontSize);
 		FontMetrics fMetric = g.getFontMetrics(font);
 		g.setFont(font);
 
@@ -286,10 +346,6 @@ public class Button {
 	}
 }
 
-
-
-
-
 //die animation in eigener runtime
 class ButtonAnimation implements Runnable {
 	public long animLength = 100; // in ms 1sec = 1000ms
@@ -306,7 +362,7 @@ class ButtonAnimation implements Runnable {
 // run-method---------------------------------------------------------------------------
 	@Override
 	public void run() {
-		//verkleinern
+		// verkleinern
 		for (int i = 0; i < depth; i++) {
 			b.setX(b.getX() + 1);
 			b.setY(b.getY() + 1);
@@ -319,7 +375,7 @@ class ButtonAnimation implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		//vergrößern
+		// vergrößern
 		for (int i = 0; i < depth; i++) {
 			b.setX(b.getX() - 1);
 			b.setY(b.getY() - 1);
