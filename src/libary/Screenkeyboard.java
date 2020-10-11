@@ -35,7 +35,7 @@ public class Screenkeyboard {
 	private Color backgroundColor = new Color(26, 26, 26, backgroundOpacity);
 
 	// text
-	private int fontSize = 55;
+	private int fontSize = 50;
 	private Font font = new Font("Copperplate Gothic Bold", Font.PLAIN, fontSize);
 	private Color textColor = Color.WHITE;
 
@@ -85,7 +85,15 @@ public class Screenkeyboard {
 				}
 			}
 		}
+	}
 
+	public boolean contains(int x, int y) {
+		if (active) {
+			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void setupKeys() {
@@ -120,7 +128,7 @@ public class Screenkeyboard {
 			}
 			declareButtonNames();
 		}
-		
+
 		keys[11][2].setImageWidth(25);
 		keys[11][2].setImageX(50);
 		keys[11][2].setImageY(50);
@@ -345,13 +353,13 @@ public class Screenkeyboard {
 		keys[8][0].setText("9");
 		keys[9][0].setText("0");
 		keys[10][0].setText("");
-		keys[11][0].setText("A");
+		keys[11][0].setText("");
 		keys[12][0].setText("BACKSPACE"); // 11
-		keys[0][1].setText("B");
-		keys[1][1].setText("C");
-		keys[2][1].setText("D");
-		keys[3][1].setText("E");
-		keys[4][1].setText("F");
+		keys[0][1].setText("");
+		keys[1][1].setText("");
+		keys[2][1].setText("");
+		keys[3][1].setText("");
+		keys[4][1].setText("");
 		keys[5][1].setText("");
 		keys[6][1].setText("");
 		keys[7][1].setText("");
@@ -389,15 +397,17 @@ public class Screenkeyboard {
 	}
 
 //getter-setter ----------------------------------------------------------------------------------------
-	public void setFontSize(int fontSize) {
-		this.fontSize = fontSize;
-		for (int i = 0; i < keys.length; i++) {
-			keys[i][0].setTextFontSize(fontSize);
-		}
-	}
 
 	public void setActive(boolean state) {
 		this.active = state;
+	}
+
+	public void setFullscreen(boolean fullscreen) {
+		this.fullscreen = fullscreen;
+	}
+
+	public void setClickAnimationLength(int animLength) {
+		//alle buttons durch setAnimLength aufrufen 
 	}
 	
 	// background
@@ -421,10 +431,10 @@ public class Screenkeyboard {
 
 	// text
 	public void setTextFontSize(int size) {
-		this.fontSize = (width + height) / size;
+		this.fontSize = size;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < keys.length; j++) {
-				keys[j][i].setTextFontSize(fontSize);
+				keys[j][i].setTextFontSize(size);
 			}
 		}
 	}

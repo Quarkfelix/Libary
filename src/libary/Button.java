@@ -36,6 +36,7 @@ public class Button {
 	private Color color = Color.DARK_GRAY;
 	private Color borderColor = Color.GREEN;
 	private BufferedImage img = null;
+	private int animLength = 100;
 
 	// text
 	private int fontSize = 40;
@@ -51,6 +52,8 @@ public class Button {
 	private int imgY;
 	private int imgwidth;
 	private int imgheight;
+	private double imgXfactor;
+	private double imgYfactor;
 
 //Constructors------------------------------------------------------------------------------------------------------------------------
 	public Button(int x, int y) {
@@ -108,7 +111,7 @@ public class Button {
 	public boolean contains(int x, int y) {
 		if (active) {
 			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
-				new ButtonAnimation(this);
+				new ButtonAnimation(this, animLength);
 				return true;
 			}
 		}
@@ -116,6 +119,10 @@ public class Button {
 	}
 
 //getter-setter-------------------------------------------------------------------------------------------------------------------------	
+	public void setAnimLength(int animLength) {
+		this.animLength = animLength;
+	}
+	
 	public void setOval(boolean state) {
 		oval = state;
 	}
@@ -134,10 +141,12 @@ public class Button {
 
 	public void setX(int x) {
 		this.x = x;
+		imgX = (int) (x + width*imgXfactor - imgwidth/2);
 	}
 
 	public void setY(int y) {
 		this.y = y;
+		imgY = (int) (y + height*imgYfactor - imgheight/2);
 	}
 
 	public int getX() {
@@ -173,13 +182,13 @@ public class Button {
 	}
 	
 	public void setImageX(double xInPercentToLeftButtonborder) {
-		double factor = xInPercentToLeftButtonborder/100;
-		imgX = (int) (x + width*factor - imgwidth/2);
+		imgXfactor = xInPercentToLeftButtonborder/100;
+		imgX = (int) (x + width*imgXfactor - imgwidth/2);
 	}
 
 	public void setImageY(double yInPercentToButtontop) {
-		double factor = yInPercentToButtontop/100;
-		imgY = (int) (y + height*factor - imgheight/2);
+		imgYfactor = yInPercentToButtontop/100;
+		imgY = (int) (y + height*imgYfactor - imgheight/2);
 	}
 
 	public void setImageWidth(int imgwidth) {
@@ -355,6 +364,13 @@ class ButtonAnimation implements Runnable {
 // Constructor---------------------------------------------------------------------------
 	public ButtonAnimation(Button b) {
 		this.b = b;
+		Thread t = new Thread(this);
+		t.start();
+	}
+	
+	public ButtonAnimation(Button b, int animLength) {
+		this.b = b;
+		this.animLength = animLength;
 		Thread t = new Thread(this);
 		t.start();
 	}
