@@ -221,8 +221,8 @@ public class Screenkeyboard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		keys[12][0].setTrueImageWidth(25);
-		keys[12][0].setTrueImageHeight(20);
+		keys[12][0].setTrueImageWidth(40);
+		keys[12][0].setTrueImageHeight(30);
 		keys[12][0].setImageX(15);
 		keys[12][0].setImageY(25);
 		// enter
@@ -403,7 +403,10 @@ public class Screenkeyboard {
 	}
 
 //getter-setter ----------------------------------------------------------------------------------------
-
+	public boolean isOpen() {
+		return active;
+	}	
+	
 	public void setFullscreen(boolean fullscreen) {
 		this.fullscreen = fullscreen;
 	}

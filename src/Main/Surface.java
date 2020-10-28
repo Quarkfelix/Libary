@@ -3,7 +3,7 @@ package Main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import libary.*;
+import libary.Screenkeyboard;
 
 
 public class Surface {

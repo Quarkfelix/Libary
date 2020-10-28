@@ -40,6 +40,8 @@ public class TextInputField {
 	private boolean textLineActive = true;
 	private double distanceTextToBottom = 0.15; // in percent
 	private double distanceTextToLeft = 0.05; // in percent
+	private double roundnessX = 0.15;
+	private double roundnessY = 1;
 	private Style style = Style.round;
 	private Design design = Design.raw;
 
@@ -61,6 +63,7 @@ public class TextInputField {
 		this.x = x;
 		this.y = y;
 		setImage("lupe_rechtsschauend.png");
+		curserAnim = new CurserAnimation(this);
 	}
 
 	public TextInputField(int x, int y, int width, int height) {
@@ -106,6 +109,14 @@ public class TextInputField {
 	}
 
 //getter-setter ----------------------------------------------------------------------------------------
+	public void setRoundnessX(double roundness) {
+		this.roundnessX = roundness;
+	}
+	
+	public void setRoundnessY(double roundness) {
+		this.roundnessY = roundness;
+	}
+	
 	public String getText() {
 		return text;
 	}
@@ -135,7 +146,6 @@ public class TextInputField {
 					text = textSave;
 				}
 			} catch (StringIndexOutOfBoundsException exept) {
-				System.out.println("textfeld zu oft backspace gedrückt");
 			}
 		}
 	}
@@ -159,11 +169,11 @@ public class TextInputField {
 	}
 
 	public void setDistanceTextToBottom(double distanceTextToBottom) {
-		this.distanceTextToBottom = distanceTextToBottom / 10;
+		this.distanceTextToBottom = distanceTextToBottom / 100;
 	}
 
 	public void setDistanceTextToLeft(double distanceTextToLeft) {
-		this.distanceTextToLeft = distanceTextToLeft / 10;
+		this.distanceTextToLeft = distanceTextToLeft / 100;
 	}
 
 	public void setSelected(boolean state) {
@@ -246,9 +256,10 @@ public class TextInputField {
 		switch (style) {
 		case round:
 			g.setColor(backgroundColor);
-			g.fillRoundRect(x, y, width, height, (int) (width * 0.15), (int) (height));
+			g.fillRoundRect(x, y, width, height, (int) (width * roundnessX), (int) (height * roundnessY));
 			break;
 		case edgy:
+			g.setColor(backgroundColor);
 			g.fillRect(x, y, width, height);
 			break;
 		default:
@@ -262,7 +273,7 @@ public class TextInputField {
 
 			if (!selected && this.text == "") {
 				g.setColor(Color.LIGHT_GRAY);
-				font = new Font("TimesRoman", Font.PLAIN, fontSize);
+				font = new Font(this.fontname, Font.PLAIN, fontSize);
 				fMetric = g.getFontMetrics(font);
 				g.setFont(font);
 				g.drawString("Search", (int) (x + width * 0.10), (int) (y + height * 0.75));
@@ -291,7 +302,7 @@ public class TextInputField {
 		textHeight = fMetric.getMaxAscent();
 
 		g.drawString(text, (int) ((width * distanceTextToLeft) + x),
-				(int) (y + height - (height * (distanceTextToBottom + 0.04))));
+				(int) (y + height - (height * (distanceTextToBottom + 0.12))));
 	}
 
 }
