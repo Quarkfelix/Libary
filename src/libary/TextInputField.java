@@ -13,8 +13,6 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import javafx.scene.input.KeyCode;
-
 /*
 	Information wie man diese Klasse benutzt
 	- Erstelle ein TextInputField
