@@ -87,13 +87,16 @@ public class TextArea {
 	// methods
 	public void checkNewLine() {
 		int rows = 1;
-		for (int j = 0; j < rows; j++) {
-			for (int i = 0; i < text.get(j).length(); i++) {
-				if (fMetric.stringWidth(text.get(j).substring(0, i)) >= this.width) {
-					text.add(text.get(j).substring(0, i - 1));
-					text.add(text.get(j).substring(i - 1, text.get(j).length()));
-					text.remove(j);
-					rows++;
+		if (text.size() > 0) {
+			for (int j = 0; j < rows; j++) {
+				for (int i = 0; i < text.get(j).length(); i++) {
+
+					if (fMetric.stringWidth(text.get(j).substring(0, i)) >= this.width) {
+						text.add(text.get(j).substring(0, i - 1));
+						text.add(text.get(j).substring(i - 1, text.get(j).length()));
+						text.remove(j);
+						rows++;
+					}
 				}
 			}
 		}
