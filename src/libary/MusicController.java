@@ -2,65 +2,75 @@ package libary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
-/*�ber music controller werden lieder abgespielt. wenn ein lied/sound abgespielt werden soll wird ein neuer MusicPlayer 
-erstellt welcher dann seinen sound apspielt.
-im controller wird auch festgelegt ob loop alle sounds oder nur einen.
-die lautst�rkensteuerung muss noch auf einzelne lieder umgestellt weden */
-public class MusicController extends Thread{ 
+public class MusicController implements Runnable {
 	private HashMap<String, MusicPlayer> musicPlayer = new HashMap<String, MusicPlayer>();
 
 //constructor------------------------------------------------------------------------------------------------------------
 	public MusicController() {
+		Thread t = new Thread(this);
+		t.start();
 	}
-	
+
 //run Method------------------------------------------------------------------------------------------------------------	
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 //methods---------------------------------------------------------------------------------------------------------------
 	public void newPlayer(String name, String url) {
 		musicPlayer.put(name, new MusicPlayer(url));
 	}
-	
+
 	public void newPlaylist(String name, String[] urls) {
 		musicPlayer.put(name, new MusicPlayer(urls));
 	}
-	
-	public void startLooping(String name) {
-		musicPlayer.get(name).setLoop(true);;
-	}
-	
-	public void playSound(String playlistName, String soundName) {
-		musicPlayer.get(playlistName).playSound(soundName);
+
+	public void play(String playlist) {
+		musicPlayer.get(playlist).play();
 	}
 
-	
-	
-	
-	
-	
+	public void stop(String playlist) {
+		musicPlayer.get(playlist).stopPlaying();
+	}
+
+	public void nextSong(String playlist) {
+		musicPlayer.get(playlist).nextSong();
+	}
+
 //getter-and-setter------------------------------------------------------------------------------------------------------
-	
-	//l�sst einen music Thread alle songs loopen
-	public void setLoop(String player, boolean state) {
-		musicPlayer.get(player).setLoop(state);
+
+	public ArrayList<String> getAllPlaylists() {
+		ArrayList<String> list = new ArrayList<>();
+		for (Entry<String, MusicPlayer> e : musicPlayer.entrySet()) {
+			list.add(e.getKey());
+		}
+		return list;
 	}
-	
+
 	public void setVolume(String player, double volume) {
-		musicPlayer.get(player).setVolume((float)volume);
+		musicPlayer.get(player).setVolume((float) volume);
 	}
-	
+
+	public void mute() {
+		for (Entry<String, MusicPlayer> e : musicPlayer.entrySet()) {
+			if (e.getValue().getVolume() != 0.0f) {
+				e.getValue().setVolume(0.0f);
+				System.out.println("muted" + e.getValue().getVolume());
+			} else {
+				System.out.println("unmuted" + e.getValue().getVolume());
+				e.getValue().setVolume(1.0f);
+			}
+			
+		}
+	}
+
 }
-
-
-
-

@@ -24,7 +24,7 @@ public class TextArea {
 	private Font font;
 	private String fontName = "Copperplate Gothic Bold";
 	private Color textColor = Color.black;
-	private ArrayList<String> text = new ArrayList<String>();
+	private ArrayList<String> text = new ArrayList<>();
 	private String alignment = "linksbuendig";
 	private String verticalAlignment = "top";
 	private int verticalAlignmentInt = 0;
@@ -206,7 +206,10 @@ public class TextArea {
 //			g.drawString(text, (int) (x + (width - textWidth)), verticalAlignmentInt);
 			break;
 		case "zentriert":
-			g.drawString(text.toString(), (int) (x - textWidth / 2 + width / 2), verticalAlignmentInt);
+			for (int i = 0; i < text.size(); i++) {
+				g.drawString(text.get(i), (int) (x - fMetric.stringWidth(text.get(i)) / 2 + width / 2), (int) (verticalAlignmentInt + linedistance * (i)));
+			}
+//			g.drawString(text.toString(), (int) (x - textWidth / 2 + width / 2), verticalAlignmentInt);
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + alignment);
