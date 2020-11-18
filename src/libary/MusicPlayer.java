@@ -16,13 +16,18 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class MusicPlayer implements Runnable {
 	private ArrayList<File> musicFiles = new ArrayList<>();
-	private boolean playing = false;
 	private float volume = (float) 0.5;
 	private Thread t;
 	private Clip clip;
 	private long lengthclip = 0;
 	private long timeold = 0;
 	private long timenew = 0;
+
+	private boolean on = false;
+	private boolean looping = false;
+	private boolean all = false;
+	private boolean locked = false;
+	private int musicpointer = 0;
 
 //constructor------------------------------------------------------------------------------------------------------------
 	public MusicPlayer(String url) {
@@ -42,28 +47,22 @@ public class MusicPlayer implements Runnable {
 //run Method------------------------------------------------------------------------------------------------------------
 	public void run() {
 		while (true) {
-			while (playing) {
-				for (int i = 0; i < musicFiles.size(); i++) {
-					play(musicFiles.get(i));
-					timeold = System.nanoTime();
-					timenew = System.nanoTime();
-					lengthclip = clip.getMicrosecondLength() * 1000;
-					while (timenew - timeold <= lengthclip) {
-						try {
-							Thread.sleep(10);
-							timenew = System.nanoTime();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+			while (this.on) {
+				while (looping) {
+					if (all) {
+						playall();
+					} else {
+						playsingle();
 					}
-					//clip hat nach paar mal skippen rumgespackt.
-					//Ich: random bullshit go!
-					clip.stop();
-					clip.flush();
-					clip.drain();
-					clip.close();
-					clip = null;
+				}
+				if (!looping && !locked) {
+					if (all) {
+						playall();
+					} else {
+						playsingle();
+					}
+					locked = true;
+					this.on = false;
 				}
 			}
 			try {
@@ -78,6 +77,58 @@ public class MusicPlayer implements Runnable {
 
 //methods---------------------------------------------------------------------------------------------------------------
 
+	// plays the song the pointer points to
+	public void playsingle() {
+		play(musicFiles.get(musicpointer));
+		timeold = System.nanoTime();
+		timenew = System.nanoTime();
+		lengthclip = clip.getMicrosecondLength() * 1000;
+		while (timenew - timeold <= lengthclip) {
+			try {
+				Thread.sleep(10);
+				timenew = System.nanoTime();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		clip.stop();
+		clip.flush();
+		clip.drain();
+		clip.close();
+		clip = null;
+	}
+
+	// plays every song till end of list starting with pointer
+	public void playall() {
+	
+		System.out.println("playall");
+		while (musicpointer < musicFiles.size()) {
+			play(musicFiles.get(musicpointer));
+			timeold = System.nanoTime();
+			timenew = System.nanoTime();
+			lengthclip = clip.getMicrosecondLength() * 1000;
+			while (timenew - timeold <= lengthclip) {
+				try {
+					Thread.sleep(10);
+					timenew = System.nanoTime();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			// clip hat nach paar mal skippen rumgespackt.
+			// Ich: random bullshit go!
+			clip.stop();
+			clip.flush();
+			clip.drain();
+			clip.close();
+			clip = null;
+			musicpointer++;
+		}
+		musicpointer = 0;
+	}
+
 	private void play(File file) {
 		AudioInputStream audioInputStream;
 		try {
@@ -88,7 +139,7 @@ public class MusicPlayer implements Runnable {
 
 			FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			volumeControl.setValue(volume);
-			
+
 		} catch (UnsupportedAudioFileException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,12 +151,24 @@ public class MusicPlayer implements Runnable {
 	}
 
 //getter-and-setter------------------------------------------------------------------------------------------------------
-	public void play() {
-		playing = true;
+	public void play(boolean loop, boolean single) {
+		if(loop) {
+			this.looping = true;
+		} else {
+			this.locked = false;
+			this.looping = false;
+		}
+		
+		if(single) {
+			this.all = false;
+		} else {
+			this.all = true;
+		}
+		this.on = true;	
 	}
 
 	public void stopPlaying() {
-		playing = true;
+		this.on = false;
 		lengthclip = 0;
 	}
 
@@ -113,11 +176,15 @@ public class MusicPlayer implements Runnable {
 		lengthclip = 0;
 	}
 
+	public void setMusicpointer(int musicindex) {
+		this.musicpointer = musicindex;
+	}
+	
 	// value between 0 and 1
 	public void setVolume(float numb) {
 		volume = (float) (Math.log(numb) / Math.log(10.0) * 20.0);
 	}
-	
+
 	public float getVolume() {
 		return volume;
 	}

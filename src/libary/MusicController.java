@@ -34,8 +34,13 @@ public class MusicController implements Runnable {
 		musicPlayer.put(name, new MusicPlayer(urls));
 	}
 
-	public void play(String playlist) {
-		musicPlayer.get(playlist).play();
+	public void play(String playlist, boolean loop, boolean single) {
+		musicPlayer.get(playlist).play(loop, single);
+	}
+	
+	public void play(String playlist, int musicindex, boolean loop, boolean single) {
+		musicPlayer.get(playlist).setMusicpointer(musicindex);
+		musicPlayer.get(playlist).play(loop, single);
 	}
 
 	public void stop(String playlist) {
@@ -45,7 +50,18 @@ public class MusicController implements Runnable {
 	public void nextSong(String playlist) {
 		musicPlayer.get(playlist).nextSong();
 	}
-
+	
+	public void mute() {
+		for (Entry<String, MusicPlayer> e : musicPlayer.entrySet()) {
+			if (e.getValue().getVolume() != 0.0f) {
+				e.getValue().setVolume(0.0f);
+				System.out.println("muted" + e.getValue().getVolume());
+			} else {
+				System.out.println("unmuted" + e.getValue().getVolume());
+				e.getValue().setVolume(1.0f);
+			}
+		}
+	}
 //getter-and-setter------------------------------------------------------------------------------------------------------
 
 	public ArrayList<String> getAllPlaylists() {
@@ -60,17 +76,6 @@ public class MusicController implements Runnable {
 		musicPlayer.get(player).setVolume((float) volume);
 	}
 
-	public void mute() {
-		for (Entry<String, MusicPlayer> e : musicPlayer.entrySet()) {
-			if (e.getValue().getVolume() != 0.0f) {
-				e.getValue().setVolume(0.0f);
-				System.out.println("muted" + e.getValue().getVolume());
-			} else {
-				System.out.println("unmuted" + e.getValue().getVolume());
-				e.getValue().setVolume(1.0f);
-			}
-			
-		}
-	}
+	
 
 }
