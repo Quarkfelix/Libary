@@ -181,6 +181,10 @@ public class Button {
 		setImageY(50);
 	}
 	
+	public BufferedImage getImage() {
+		return img;
+	}
+	
 	public void setImageX(double xInPercentToLeftButtonborder) {
 		imgXfactor = xInPercentToLeftButtonborder/100;
 		imgX = (int) (x + width*imgXfactor - imgwidth/2);

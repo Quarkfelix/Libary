@@ -16,7 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class MusicPlayer implements Runnable {
 	private ArrayList<File> musicFiles = new ArrayList<>();
-	private float volume = (float) 0.5;
+	private float volume = 0;
 	private Thread t;
 	private Clip clip;
 	private long lengthclip = 0;
@@ -72,7 +72,6 @@ public class MusicPlayer implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 //methods---------------------------------------------------------------------------------------------------------------
@@ -101,7 +100,6 @@ public class MusicPlayer implements Runnable {
 
 	// plays every song till end of list starting with pointer
 	public void playall() {
-	
 		System.out.println("playall");
 		while (musicpointer < musicFiles.size()) {
 			play(musicFiles.get(musicpointer));
@@ -135,11 +133,11 @@ public class MusicPlayer implements Runnable {
 			audioInputStream = AudioSystem.getAudioInputStream(file.getAbsoluteFile());
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
-			clip.start();
 
 			FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			volumeControl.setValue(volume);
-
+			volumeControl.setValue(-1 * volume);
+			
+			clip.start();
 		} catch (UnsupportedAudioFileException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,20 +167,31 @@ public class MusicPlayer implements Runnable {
 
 	public void stopPlaying() {
 		this.on = false;
+		this.looping = false;
+		this.locked = true;
+		musicpointer = musicFiles.size()-1;
 		lengthclip = 0;
+	}
+	
+	public void resume() {
+		this.on = true;
 	}
 
 	public void nextSong() {
 		lengthclip = 0;
 	}
 
+	public boolean isOn() {
+		return this.on;
+	}
+	
 	public void setMusicpointer(int musicindex) {
 		this.musicpointer = musicindex;
 	}
 	
-	// value between 0 and 1
-	public void setVolume(float numb) {
-		volume = (float) (Math.log(numb) / Math.log(10.0) * 20.0);
+	// value between 0 and 100
+	public void setVolume(int volume) {
+		this.volume = volume;
 	}
 
 	public float getVolume() {
