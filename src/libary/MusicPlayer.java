@@ -145,7 +145,6 @@ public class MusicPlayer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 //getter-and-setter------------------------------------------------------------------------------------------------------
@@ -192,6 +191,10 @@ public class MusicPlayer implements Runnable {
 	// value between 0 and 100
 	public void setVolume(int volume) {
 		this.volume = volume;
+		if(clip != null) {
+			FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			volumeControl.setValue(-1 * volume);
+		}	
 	}
 
 	public float getVolume() {
