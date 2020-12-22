@@ -16,7 +16,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class MusicPlayer implements Runnable {
 	private ArrayList<File> musicFiles = new ArrayList<>();
-	private float volume = 0;
+	private int volume = 0;
+	private int volumesave = 0;
 	private Thread t;
 	private Clip clip;
 	private long lengthclip = 0;
@@ -145,6 +146,15 @@ public class MusicPlayer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void mute() {
+		if(volume != 80) { //mute
+			volumesave = volume;
+			setVolume(80);
+		} else { 			//unmute
+			setVolume(volumesave);
+		}		
 	}
 
 //getter-and-setter------------------------------------------------------------------------------------------------------

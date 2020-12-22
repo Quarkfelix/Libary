@@ -52,10 +52,9 @@ public class MusicController implements Runnable {
 		musicPlayer.get(playlist).nextSong();
 	}
 
-	public void mute() {
-		for (Entry<String, MusicPlayer> e : musicPlayer.entrySet()) {
-						
-		}
+	//mutes or unmutes
+	public void mute(String playlist) {
+		musicPlayer.get(playlist).mute();
 	}
 //getter-and-setter------------------------------------------------------------------------------------------------------
 

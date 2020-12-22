@@ -1,5 +1,6 @@
 package Main;
 
+import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,13 +13,13 @@ public class MouseHandler implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		Draw.surface.checkButtonPress(e.getX(), e.getY() - 26);
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		Draw.surface.checkButtonPress(e.getX(), e.getY() - 26);
+		Draw.surface.checkButtonClick(e.getX(), e.getY() - 26);
 	}
 
 	@Override

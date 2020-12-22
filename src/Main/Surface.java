@@ -4,24 +4,28 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import libary.Screenkeyboard;
+import libary.Slider;
 
 
 public class Surface {
-	private Screenkeyboard keyboard;
+	public Slider slider;
 	
 	public Surface() {
-		keyboard = new Screenkeyboard(100, 200, 1000, 350);
-		keyboard.setBackgroundCornerRadius(20);
+		slider = new Slider(200, 200);
 	}
 	
 	public void checkButtonPress(int x, int y) {
-		keyboard.checkPress(x, y);
+		slider.contains(x, y);
+	}
+	
+	public void checkButtonClick(int x, int y) {
+		slider.contains(x, y);
 	}
 	
 	
 	
 //paint--------------------------------------------------------------------------------------------------------
 	public void paint(Graphics2D g) {
-		keyboard.paint(g);
+		slider.paint(g);
 	}	
 }

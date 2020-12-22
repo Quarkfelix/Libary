@@ -2,8 +2,8 @@ package Main;
 
 import javax.swing.JFrame;
 
-public class GUI extends JFrame{
-	private JFrame jf;
+public class GUI {
+	public JFrame jf;
 	public static Draw draw;
 	
 	public GUI() {
@@ -17,8 +17,11 @@ public class GUI extends JFrame{
 
 		jf.addMouseListener(new MouseHandler());
 		jf.addKeyListener(new KeyHander());
+		jf.addMouseMotionListener(new MouseMotionHandler());
 		jf.add(draw);
 		jf.requestFocus();
 		jf.setVisible(true);
+		System.out.println(jf.getX());
 	}
+	
 }
