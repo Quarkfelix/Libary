@@ -1,6 +1,12 @@
 package Main;
 
+import java.awt.Color;
+import java.net.URL;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class GUI {
 	public JFrame jf;
@@ -21,7 +27,14 @@ public class GUI {
 		jf.add(draw);
 		jf.requestFocus();
 		jf.setVisible(true);
-		System.out.println(jf.getX());
+		
+//		Icon imageIcon = new ImageIcon(this.getClass().getResource("test.gif"));
+//		JLabel label = new JLabel(imageIcon);
+//		label.setSize(100, 500);
+//		label.setLocation(50, 50);
+//		label.setVisible(true);
+//		jf.getContentPane().add(label);	
+//		jf.pack();
 	}
 	
 }

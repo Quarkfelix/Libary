@@ -6,9 +6,6 @@ import java.awt.MouseInfo;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
-import Main.Main;
-
-
 //if contains returns true slider needs to constantly get mouseposition over giveMousePosition() function
 public class Slider{
 	private	int x;

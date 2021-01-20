@@ -45,7 +45,7 @@ public class TextInputField {
 
 	// text
 	private String text = "";
-	
+
 	private Color textcolor = Color.WHITE;
 	private Font font;
 	private String fontname = "Copperplate Gothic Bold";
@@ -91,6 +91,7 @@ public class TextInputField {
 
 	// checkt ob uebergebener punkt enthalten ist
 	public boolean contains(int x, int y) {
+
 		if (active) {
 			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
 				selected = true;
@@ -110,11 +111,11 @@ public class TextInputField {
 	public void setRoundnessX(double roundness) {
 		this.roundnessX = roundness;
 	}
-	
+
 	public void setRoundnessY(double roundness) {
 		this.roundnessY = roundness;
 	}
-	
+
 	public String getText() {
 		return text;
 	}
@@ -128,7 +129,7 @@ public class TextInputField {
 		if (selected) {
 			try {
 				String textSave = text;
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+				if (e.getKeyCode() == KeyEvent.VK_SHIFT || e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
 					// Shift soll nicht angezeigt werden
 				} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					text = text.substring(0, text.length() - 1);
@@ -147,13 +148,13 @@ public class TextInputField {
 			}
 		}
 	}
-	
+
 	public void setTextFont(Font font) {
 		this.font = font;
 		this.fontname = font.getName();
 		this.fontSize = font.getSize();
 	}
-	
+
 	public void setTextFont(String name) {
 		this.fontname = name;
 	}
