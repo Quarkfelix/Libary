@@ -22,10 +22,10 @@ import javax.imageio.ImageIO;
 */
 
 public class TextInputField {
-	int x = 100;
-	int y = 100;
-	int width = 100;
-	int height = 40;
+	private int x = 100;
+	private int y = 100;
+	private int width = 100;
+	private int height = 40;
 
 	private Graphics2D g;
 	private FontMetrics fMetric;
@@ -52,6 +52,8 @@ public class TextInputField {
 	private int fontSize = 500;
 	private int textWidth = 0;
 	private int textHeight = 500;
+	private int beginIndexDrawString = 0;
+	private int writingShift = 0;
 
 	private BufferedImage searchbarImage;
 	private CurserAnimation curserAnim;
@@ -91,7 +93,6 @@ public class TextInputField {
 
 	// checkt ob uebergebener punkt enthalten ist
 	public boolean contains(int x, int y) {
-
 		if (active) {
 			if (x >= this.x && y >= this.y && x <= this.x + width && y <= this.y + height) {
 				selected = true;
@@ -99,6 +100,7 @@ public class TextInputField {
 			}
 		}
 		selected = false;
+		writingShift = 0;
 		return false;
 	}
 
@@ -108,45 +110,13 @@ public class TextInputField {
 	}
 
 //getter-setter ----------------------------------------------------------------------------------------
+	// styling
 	public void setRoundnessX(double roundness) {
-		this.roundnessX = roundness;
+		this.roundnessX = roundness / 100;
 	}
 
 	public void setRoundnessY(double roundness) {
-		this.roundnessY = roundness;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public void setText(KeyEvent e) {
-		// rechts rausschreiben sperre
-		if (selected) {
-			try {
-				String textSave = text;
-				if (e.getKeyCode() == KeyEvent.VK_SHIFT || e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
-					// Shift soll nicht angezeigt werden
-				} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					text = text.substring(0, text.length() - 1);
-				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					this.setSelected(false);
-				} else {
-					text = text + e.getKeyChar();
-				}
-
-				textWidth = fMetric.stringWidth(text);
-				int diff = (int) ((x + width - (width * distanceTextToLeft)) - (x + (width * distanceTextToLeft)));
-				if (textWidth >= diff) {
-					text = textSave;
-				}
-			} catch (StringIndexOutOfBoundsException exept) {
-			}
-		}
+		this.roundnessY = roundness / 100;
 	}
 
 	public void setTextFont(Font font) {
@@ -163,24 +133,12 @@ public class TextInputField {
 		this.fontSize = fontsize;
 	}
 
-	public double getDistanceTextToBottom() {
-		return distanceTextToBottom * 10;
-	}
-
 	public void setDistanceTextToBottom(double distanceTextToBottom) {
 		this.distanceTextToBottom = distanceTextToBottom / 100;
 	}
 
 	public void setDistanceTextToLeft(double distanceTextToLeft) {
 		this.distanceTextToLeft = distanceTextToLeft / 100;
-	}
-
-	public void setSelected(boolean state) {
-		this.selected = state;
-	}
-
-	public boolean isSelected() {
-		return selected;
 	}
 
 	public void setTextLineActive(boolean state) {
@@ -204,20 +162,8 @@ public class TextInputField {
 		}
 	}
 
-	public int getTextWidth() {
-		return textWidth;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getHeight() {
-		return this.height;
-	}
-
-	public int getY() {
-		return this.y;
+	public Font getTextFont() {
+		return font;
 	}
 
 	// color
@@ -235,6 +181,108 @@ public class TextInputField {
 
 	public void setTextColor(Color color) {
 		this.textcolor = color;
+	}
+	// end color
+	// end styling
+
+	public String getText() {
+		return text;
+	}
+
+	// overrides text
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	// modifies text according to keyinput
+	public void setText(KeyEvent e) {
+		// rechts rausschreiben sperre
+		if (selected) {
+			try {
+				if (e.getKeyCode() == KeyEvent.VK_SHIFT || e.getKeyCode() == KeyEvent.VK_UP
+						|| e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_CAPS_LOCK
+						|| e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_CIRCUMFLEX) {
+					// Shift soll nicht angezeigt werden
+				} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					text = text.substring(0, text.length() + writingShift - 1)
+							+ text.substring(text.length() + writingShift, text.length());
+				} else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+					text = text.substring(0, text.length() + writingShift)
+							+ text.substring(text.length() + writingShift + 1, text.length());
+					writingShift++;
+				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					this.setSelected(false);
+					writingShift = 0;
+				} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					if (text.length() + writingShift > 0) {
+						writingShift--;
+					}
+				} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					if (text.length() + writingShift < text.length()) {
+						writingShift++;
+					}
+				} else {
+					text = text.substring(0, text.length() + writingShift) + e.getKeyChar()
+							+ text.substring(text.length() + writingShift, text.length()); // anfang bis curser + new
+																							// char + curser bis ende
+					textWidth = fMetric.stringWidth(text);
+				}
+				textWidth = fMetric.stringWidth(text);
+			} catch (StringIndexOutOfBoundsException exept) {
+			}
+			beginIndexDrawString = 0;
+			while (fMetric.stringWidth(text.substring(beginIndexDrawString, text.length())) > width
+					- (width * distanceTextToLeft * 2)) {
+				beginIndexDrawString++;
+			}
+			
+			//kleiner als des muss lach links text.length() + tif.getWritingShift()))
+			//+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft()))
+		}
+	}
+
+	public double getDistanceTextToBottom() {
+		return distanceTextToBottom * 10;
+	}
+
+	public void setSelected(boolean state) {
+		this.selected = state;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public int getTextWidth() {
+		return textWidth;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getHeight() {
+		return this.height;
+	}
+
+	public int getWidth() {
+		return this.width;
+	}
+
+	public int getY() {
+		return this.y;
+	}
+
+	public double getDistanceTextToLeft() {
+		return this.distanceTextToLeft;
+	}
+
+	public int getBeginIndexDrawString() {
+		return this.beginIndexDrawString;
+	}
+
+	public int getWritingShift() {
+		return this.writingShift;
 	}
 
 //paint ------------------------------------------------------------------------------------------------
@@ -300,8 +348,8 @@ public class TextInputField {
 		textWidth = fMetric.stringWidth(text);
 		textHeight = fMetric.getMaxAscent();
 
-		g.drawString(text, (int) ((width * distanceTextToLeft) + x),
-				(int) (y + height - (height * (distanceTextToBottom + 0.12))));
+		g.drawString(text.substring(beginIndexDrawString, text.length()), (int) (x + (width * distanceTextToLeft)),
+				(int) (y + height - (height * distanceTextToBottom) - textHeight*0.05));
 	}
 
 }
@@ -309,7 +357,7 @@ public class TextInputField {
 class CurserAnimation implements Runnable {
 	private Thread t;
 	private TextInputField tif;
-	private int curserBlinkInterval = 500;
+	private int curserBlinkInterval = 550;
 	private boolean draw = false;
 
 	public CurserAnimation(TextInputField tif) {
@@ -349,15 +397,15 @@ class CurserAnimation implements Runnable {
 
 	public void paint(Graphics2D g) {
 		if (draw) {
-			g.setColor(Color.BLACK);
-			int x;
-			if (tif.getTextWidth() < 7) {
-				x = tif.getX() + tif.getTextWidth() + 7;
-			} else {
-				x = tif.getX() + tif.getTextWidth();
-			}
+			String text = tif.getText();
+			FontMetrics f = g.getFontMetrics(tif.getTextFont());
 
-			g.fillRect(x + 21, (int) (tif.getY() + (tif.getHeight() * 0.2)), 2, (int) (tif.getHeight() * 0.6));
+			g.setColor(Color.BLACK);
+			g.fillRect(
+					(int) (f.stringWidth(
+							text.substring(tif.getBeginIndexDrawString(), text.length() + tif.getWritingShift()))
+							+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft())),
+					(int) (tif.getY() + (int) (f.getMaxAscent() * 0.05)), 2, (int) (f.getMaxAscent() * 0.9));
 		}
 	}
 

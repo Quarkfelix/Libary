@@ -1,12 +1,14 @@
 package libary;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -37,6 +39,8 @@ public class Button {
 	private Color borderColor = Color.GREEN;
 	private BufferedImage img = null;
 	private int animLength = 100;
+	private boolean selected = false;
+	private Color selectionColor = Color.RED;
 
 	// text
 	private int fontSize = 40;
@@ -118,11 +122,46 @@ public class Button {
 		return false;
 	}
 
+	public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
+		int original_width = imgSize.width;
+		int original_height = imgSize.height;
+		int bound_width = boundary.width;
+		int bound_height = boundary.height;
+		int new_width = original_width;
+		int new_height = original_height;
+
+		// first check if we need to scale width
+		if (original_width > bound_width) {
+			// scale width to fit
+			new_width = bound_width;
+			// scale height to maintain aspect ratio
+			new_height = (new_width * original_height) / original_width;
+		}
+
+		// then check if we need to scale even with the new height
+		if (new_height > bound_height) {
+			// scale height to fit instead
+			new_height = bound_height;
+			// scale width to maintain aspect ratio
+			new_width = (new_height * original_width) / original_height;
+		}
+
+		return new Dimension(new_width, new_height);
+	}
+	
 //getter-setter-------------------------------------------------------------------------------------------------------------------------	
+	public void setSelected(boolean state) {
+		this.selected = state;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
 	public void setAnimLength(int animLengthInMiliseconds) {
 		this.animLength = animLengthInMiliseconds;
 	}
-	
+
 	public void setOval(boolean state) {
 		oval = state;
 	}
@@ -141,12 +180,12 @@ public class Button {
 
 	public void setX(int x) {
 		this.x = x;
-		imgX = (int) (x + width*imgXfactor - imgwidth/2);
+		imgX = (int) (x + width * imgXfactor - imgwidth / 2);
 	}
 
 	public void setY(int y) {
 		this.y = y;
-		imgY = (int) (y + height*imgYfactor - imgheight/2);
+		imgY = (int) (y + height * imgYfactor - imgheight / 2);
 	}
 
 	public int getX() {
@@ -176,38 +215,31 @@ public class Button {
 	// img
 	public void setImg(BufferedImage img) {
 		this.img = img;
-		setImageWidth(width);
+		setImageSize(this.width, this.height);
 		setImageX(50);
 		setImageY(50);
 	}
-	
+
 	public BufferedImage getImage() {
 		return img;
 	}
-	
+
 	public void setImageX(double xInPercentToLeftButtonborder) {
-		imgXfactor = xInPercentToLeftButtonborder/100;
-		imgX = (int) (x + width*imgXfactor - imgwidth/2);
+		imgXfactor = xInPercentToLeftButtonborder / 100;
+		imgX = (int) (x + width * imgXfactor - imgwidth / 2);
 	}
 
 	public void setImageY(double yInPercentToButtontop) {
-		imgYfactor = yInPercentToButtontop/100;
-		imgY = (int) (y + height*imgYfactor - imgheight/2);
+		imgYfactor = yInPercentToButtontop / 100;
+		imgY = (int) (y + height * imgYfactor - imgheight/2);
 	}
 
-	public void setImageWidth(int imgwidth) {
+	//maximum size
+	public void setImageSize(int width, int height) {
 		if (img != null) {
-			this.imgwidth = imgwidth;
-			double resizingfactor = (double) (imgwidth) / img.getWidth();
-			this.imgheight = (int) (img.getHeight() * resizingfactor);
-		}
-	}
-
-	public void setImageHeight(int imgheight) {
-		if (img != null) {
-			this.imgheight = imgheight;
-			double resizingfactor = (double) (imgheight) / img.getHeight();
-			imgwidth = (int) (img.getWidth() * resizingfactor);
+			Dimension d = this.getScaledDimension(new Dimension(img.getWidth(),img.getHeight()), new Dimension(width, height));
+			this.imgwidth = (int)d.getWidth();
+			this.imgheight = (int)d.getHeight();
 		}
 	}
 
@@ -217,14 +249,6 @@ public class Button {
 
 	public void setTrueImageHeight(int imgheight) {
 		this.imgheight = imgheight;
-	}
-
-	/* percent is measured in the width of the button */
-	public void setImageSize(double sizeInPercentToButton) {
-		double size = sizeInPercentToButton / 100;
-		this.imgwidth = (int) (width * size);
-		double resizingfactor = (double) (imgwidth) / img.getWidth();
-		this.imgheight = (int) (img.getHeight() * resizingfactor);
 	}
 
 	// ButtonColor
@@ -254,7 +278,7 @@ public class Button {
 		this.fontname = font.getName();
 		this.fontSize = font.getSize();
 	}
-	
+
 	public void setTextFont(String name) {
 		this.fontname = name;
 	}
@@ -317,17 +341,22 @@ public class Button {
 				// normal button
 				g.setColor(color);
 				g.fillRoundRect(x, y, width, height, radiusWidth, radiusHeight);
-				
+
 				if (border) {
 					g.setColor(borderColor);
 					g.drawRoundRect(x, y, width, height, radiusWidth, radiusHeight);
 				}
+				if (selected) {
+					g.setColor(selectionColor);
+					g.drawRoundRect(x, y, width, height, radiusWidth, radiusHeight);
+				}
 			}
+
 		}
 	}
 
 	private void drawImage(Graphics2D g) {
-		g.drawImage(img, imgX, imgY, imgwidth, imgheight, null);
+		g.drawImage(img, imgX, imgY, this.imgwidth, this.imgheight, null);
 	}
 
 	private void drawText(Graphics2D g) {
@@ -371,7 +400,7 @@ class ButtonAnimation implements Runnable {
 		Thread t = new Thread(this);
 		t.start();
 	}
-	
+
 	public ButtonAnimation(Button b, int animLength) {
 		this.b = b;
 		this.animLength = animLength;

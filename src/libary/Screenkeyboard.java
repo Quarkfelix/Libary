@@ -13,8 +13,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-
-
 import java.awt.Robot;
 
 public class Screenkeyboard {
@@ -130,17 +128,17 @@ public class Screenkeyboard {
 			declareButtonNames();
 		}
 
-		keys[11][2].setImageWidth(25);
+		keys[11][2].setImageSize(25, 100);
 		keys[11][2].setImageX(50);
 		keys[11][2].setImageY(50);
 	}
 
 	public void close() {
 		active = false;
-		if(numActive)
+		if (numActive)
 			numpad();
 	}
-	
+
 	public void open() {
 		active = true;
 	}
@@ -237,7 +235,7 @@ public class Screenkeyboard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		keys[12][1].setImageWidth(37);
+		keys[12][1].setImageSize(37, 37);
 		keys[12][1].setImageX(20);
 		keys[12][1].setImageY(25);
 		// numb/3rd row
@@ -250,7 +248,7 @@ public class Screenkeyboard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		keys[11][2].setImageWidth(25);
+		keys[11][2].setImageSize(25, 25);
 		keys[11][2].setImageX(50);
 		keys[11][2].setImageY(50);
 		// space
@@ -274,10 +272,10 @@ public class Screenkeyboard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		keys[12][3].setImageWidth(32);
+		keys[12][3].setImageSize(32, 32);
 		keys[12][3].setImageX(50);
 		keys[12][3].setImageY(50);
-		keys[0][3].setImageWidth(32);
+		keys[0][3].setImageSize(32, 32);
 		keys[0][3].setImageX(50);
 		keys[0][3].setImageY(50);
 
@@ -306,7 +304,7 @@ public class Screenkeyboard {
 		keys[9][0].setText("P");
 		keys[10][0].setText("Ü");
 		keys[11][0].setText("");
-		keys[12][0].setText("BACKSPACE"); // 11
+		keys[12][0].setText("BACK_SPACE"); // 11
 		keys[0][1].setText("A");
 		keys[1][1].setText("S");
 		keys[2][1].setText("D");
@@ -361,7 +359,7 @@ public class Screenkeyboard {
 		keys[9][0].setText("0");
 		keys[10][0].setText("");
 		keys[11][0].setText("");
-		keys[12][0].setText("BACKSPACE"); // 11
+		keys[12][0].setText("BACK_SPACE"); // 11
 		keys[0][1].setText("");
 		keys[1][1].setText("");
 		keys[2][1].setText("");
@@ -406,8 +404,8 @@ public class Screenkeyboard {
 //getter-setter ----------------------------------------------------------------------------------------
 	public boolean isOpen() {
 		return active;
-	}	
-	
+	}
+
 	public void setFullscreen(boolean fullscreen) {
 		this.fullscreen = fullscreen;
 	}
@@ -419,7 +417,7 @@ public class Screenkeyboard {
 			}
 		}
 	}
-	
+
 	// background
 	public void setBackgroundActive(boolean state) {
 		this.backgroundActive = state;

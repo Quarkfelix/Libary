@@ -32,16 +32,16 @@ public class Draw extends JPanel{
 			
 			
 			
-			g.drawImage(icon, 20, 20, this);
+//			g.drawImage(icon, 20, 20, this);
 			
-//			g.setColor(Color.RED);
-//			g.fillRect(0, 0, this.getWidth(), this.getHeight());
-//			try {
-//				surface.paint(g);			
-//			} catch (Exception e) {}
-//			g.setColor(Color.RED);
-//			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
-//			g.drawString("FPS: " + Main.t.fps, 10, 47);
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+			try {
+				surface.paint(g);			
+			} catch (Exception e) {}
+			g.setColor(Color.RED);
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
+			g.drawString("FPS: " + Main.t.fps, 10, 47);
 			
 		}
 }

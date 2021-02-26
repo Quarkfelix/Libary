@@ -90,12 +90,18 @@ public class TextArea {
 		if (text.size() > 0) {
 			for (int j = 0; j < rows; j++) {
 				for (int i = 0; i < text.get(j).length(); i++) {
-
 					if (fMetric.stringWidth(text.get(j).substring(0, i)) >= this.width) {
-						text.add(text.get(j).substring(0, i - 1));
-						text.add(text.get(j).substring(i - 1, text.get(j).length()));
-						text.remove(j);
-						rows++;
+						//check for space in direction left and cut there
+						char[] textarray = text.get(j).substring(0, i - 1).toCharArray();
+						for (int k = textarray.length-1; k > 0; k--) {
+							if(textarray[k] == ' ') {
+								text.add(text.get(j).substring(0, k));
+								text.add(text.get(j).substring(k + 1, text.get(j).length()));
+								text.remove(j);
+								rows++;
+								break;
+							}
+						}
 					}
 				}
 			}
