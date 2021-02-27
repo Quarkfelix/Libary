@@ -236,13 +236,13 @@ public class TextInputField {
 				beginIndexDrawString++;
 			}
 			curserAnim.resetIntervall();
-			//kleiner als des muss lach links text.length() + tif.getWritingShift()))
-			//+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft()))
+			// kleiner als des muss lach links text.length() + tif.getWritingShift()))
+			// + tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft()))
 		}
 	}
 
 	public double getDistanceTextToBottom() {
-		return distanceTextToBottom * 10;
+		return distanceTextToBottom * 100;
 	}
 
 	public void setSelected(boolean state) {
@@ -349,7 +349,7 @@ public class TextInputField {
 		textHeight = fMetric.getMaxAscent();
 
 		g.drawString(text.substring(beginIndexDrawString, text.length()), (int) (x + (width * distanceTextToLeft)),
-				(int) (y + height - (height * distanceTextToBottom) - textHeight*0.05));
+				(int) (y + height - (height * distanceTextToBottom) - textHeight * 0.05));
 	}
 
 }
@@ -402,18 +402,19 @@ class CurserAnimation implements Runnable {
 			t.notify();
 		}
 	}
-	
+
 	public void paint(Graphics2D g) {
 		if (draw) {
 			String text = tif.getText();
 			FontMetrics f = g.getFontMetrics(tif.getTextFont());
 
+			int curY = (int) (tif.getY() + tif.getHeight() - (tif.getHeight() * tif.getDistanceTextToBottom() / 100)
+					- f.getMaxAscent()*0.9);
+			int curX = (int) (f
+					.stringWidth(text.substring(tif.getBeginIndexDrawString(), text.length() + tif.getWritingShift()))
+					+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft()));
 			g.setColor(Color.BLACK);
-			g.fillRect(
-					(int) (f.stringWidth(
-							text.substring(tif.getBeginIndexDrawString(), text.length() + tif.getWritingShift()))
-							+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft())),
-					(int) (tif.getY() + (int) (f.getMaxAscent() * 0.05)), 2, (int) (f.getMaxAscent() * 0.9));
+			g.fillRect(curX, curY, 2, (int) (f.getMaxAscent()*0.9));
 		}
 	}
 
