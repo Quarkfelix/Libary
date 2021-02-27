@@ -235,7 +235,7 @@ public class TextInputField {
 					- (width * distanceTextToLeft * 2)) {
 				beginIndexDrawString++;
 			}
-			
+			curserAnim.resetIntervall();
 			//kleiner als des muss lach links text.length() + tif.getWritingShift()))
 			//+ tif.getX() + (tif.getWidth() * tif.getDistanceTextToLeft()))
 		}
@@ -381,20 +381,28 @@ class CurserAnimation implements Runnable {
 				} else {
 					draw = true;
 				}
-				try {
-					Thread.sleep(curserBlinkInterval);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				synchronized (t) {
+					try {
+						Thread.currentThread().wait(curserBlinkInterval);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			} else {
 				draw = false;
 			}
-
 		}
 
 	}
 
+	public void resetIntervall() {
+		draw = false;
+		synchronized (t) {
+			t.notify();
+		}
+	}
+	
 	public void paint(Graphics2D g) {
 		if (draw) {
 			String text = tif.getText();
